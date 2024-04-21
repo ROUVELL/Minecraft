@@ -26,11 +26,12 @@ namespace colors
 class Image
 {
     uint8_t* data;
-    int32_t width, height, channels;
+    uint32_t width, height, channels;
 
 public:
     Image();
     Image(const std::string& path);
+    Image(uint32_t width, uint32_t height, uint32_t channels = 4);
     Image(const Image&);
     Image(Image&&) noexcept;
     ~Image();
@@ -38,13 +39,15 @@ public:
     bool isRGB() const { return channels == 3; }
     bool isRGBA() const { return channels == 4; }
 
-    int32_t getWidth() const { return width; }
-    int32_t getHeight() const { return height; }
-    int32_t getChannels() const { return channels; }
+    uint32_t getWidth() const { return width; }
+    uint32_t getHeight() const { return height; }
+    uint32_t getChannels() const { return channels; }
     const uint8_t* getData() const { return data; }
 
     /* If isRGB return true alpha will be ignored */
     void setPixel(uint32_t x, uint32_t y, const Color color);
+
+    void blit(uint32_t x, uint32_t y, const Image& img);
 
     Texture makeTexture() const; 
 
