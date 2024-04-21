@@ -19,8 +19,8 @@ Engine::Engine()
     dt(16.6),
     frame(0)
 {
-    shaders.emplace("chunk", Shader("../res/shaders/main.glslv", "../res/shaders/main.glslf"));
-    textures.emplace("chunk", Texture("../res/textures/grass.png"));
+    shaders.emplace("chunk", Shader("res/shaders/main.glslv", "res/shaders/main.glslf"));
+    textures.emplace("chunk", Texture("res/textures/grass.png"));
 }
 
 Engine::~Engine()
