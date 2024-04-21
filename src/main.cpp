@@ -4,7 +4,7 @@
 
 int main()
 {
-	Window::initialize(false, false);
+	Window::initialize(true, true);
 	Events::initialize();
 
     Engine engine;

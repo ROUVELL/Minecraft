@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <glm/glm.hpp>
 
 #include "Chunks.hpp"
 #include "../Graphics/Mesh.hpp"

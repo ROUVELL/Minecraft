@@ -29,6 +29,27 @@ void buildChunkMesh(const Chunk& chunk, MeshData* meshData)
 
 				ChunkNeighboars n = chunk.getNeighboars();
 
+
+				if ((z + 1 != CHUNK_SIDE) ? chunk.empty(x, y, z + 1) : (n.front->at(x, y, 0) == 0))  // front face
+				{
+					newVertex(x    , y + 1, z + 1, 0, 0, id);  // top left
+					newVertex(x + 1, y + 1, z + 1, 1, 0, id);  // top right
+					newVertex(x + 1, y    , z + 1, 1, 1, id);  // bottom right
+					newVertex(x    , y    , z + 1, 0, 1, id);  // bottom left
+
+					updateIndices();
+				}
+
+				if ((z > 0) ? chunk.empty(x, y, z - 1) : (n.back->at(x, y, CHUNK_SIDE - 1) == 0))  // back face
+				{
+					newVertex(x + 1, y + 1, z, 0, 0, id);  // top left
+					newVertex(x    , y + 1, z, 1, 0, id);  // top right
+					newVertex(x    , y    , z, 1, 1, id);  // bottom right
+					newVertex(x + 1, y    , z, 0, 1, id);  // bottom left
+
+					updateIndices();
+				}
+
 				if ((x + 1 != CHUNK_SIDE) ? chunk.empty(x + 1, y, z) : (n.right->at(0, y, z) == 0))  // right face
 				{
 					newVertex(x + 1, y + 1, z + 1, 0, 0, id);  // top left
@@ -48,6 +69,7 @@ void buildChunkMesh(const Chunk& chunk, MeshData* meshData)
 
 					updateIndices();
 				}
+				
 				if (chunk.empty(x, y + 1, z))  // top face
 				{
 					newVertex(x    , y + 1, z    , 0, 0, id);  // top left
@@ -64,25 +86,6 @@ void buildChunkMesh(const Chunk& chunk, MeshData* meshData)
 					newVertex(x + 1, y, z + 1, 1, 0, id);  // top right
 					newVertex(x + 1, y, z    , 1, 1, id);  // bottom right
 					newVertex(x    , y, z    , 0, 1, id);  // bottom left
-
-					updateIndices();
-				}
-				if ((z + 1 != CHUNK_SIDE) ? chunk.empty(x, y, z + 1) : (n.front->at(x, y, 0) == 0))  // front face
-				{
-					newVertex(x    , y + 1, z + 1, 0, 0, id);  // top left
-					newVertex(x + 1, y + 1, z + 1, 1, 0, id);  // top right
-					newVertex(x + 1, y    , z + 1, 1, 1, id);  // bottom right
-					newVertex(x    , y    , z + 1, 0, 1, id);  // bottom left
-
-					updateIndices();
-				}
-
-				if ((z > 0) ? chunk.empty(x, y, z - 1) : (n.back->at(x, y, CHUNK_SIDE - 1) == 0))  // back face
-				{
-					newVertex(x + 1, y + 1, z, 0, 0, id);  // top left
-					newVertex(x    , y + 1, z, 1, 0, id);  // top right
-					newVertex(x    , y    , z, 1, 1, id);  // bottom right
-					newVertex(x + 1, y    , z, 0, 1, id);  // bottom left
 
 					updateIndices();
 				}

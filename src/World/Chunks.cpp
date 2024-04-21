@@ -2,7 +2,6 @@
 
 #include <limits>
 #include <math.h>
-#include <limits.h>
 #include <memory>
 
 #include "Chunk.hpp"
@@ -31,7 +30,7 @@ Generator generator = [](voxel_t* voxels, int cx, int cz) -> void
 
 	for (int lz = 0; lz < CHUNK_SIDE; ++lz)
 		for (int lx = 0; lx < CHUNK_SIDE; ++lx)
-			voxels[lx + lz * CHUNK_SIDE] = 1 + ((cx << 2) ^ (cz << 6));
+			voxels[lx + lz * CHUNK_SIDE] = 1; // + ((cx << 2) ^ (cz << 6));
 };
 
 Chunks::Chunks()

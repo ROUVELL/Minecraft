@@ -7,7 +7,6 @@ layout (location = 2) in float blockId;
 uniform mat4 model;
 uniform mat4 projview;
 
-out vec4 color;
 out vec2 uv;
 
 vec3 hash31(float p)
@@ -19,7 +18,6 @@ vec3 hash31(float p)
 
 void main()
 {
-	color = vec4(hash31(blockId), 1.0);
 	uv = inUV;
 	
 	gl_Position = projview * model * vec4(inPosition, 1.0);

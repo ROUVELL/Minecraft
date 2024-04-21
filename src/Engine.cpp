@@ -20,7 +20,7 @@ Engine::Engine()
     frame(0)
 {
     shaders["chunk"] = loadShader("../res/shaders/main.glslv", "../res/shaders/main.glslf");
-    textures["chunk"] = loadTexture("../res/textures/frame.png");
+    textures["chunk"] = loadTexture("../res/textures/grass.png");
 }
 
 Engine::~Engine()
