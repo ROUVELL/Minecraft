@@ -3,7 +3,7 @@
 #include <iostream>
 #include <GL/glew.h>
 
-#include "stb/stb_image.hpp"
+#include "../vendors/stb/stb_image.hpp"
 
 Texture::Texture()
 	: ID{ 0 }, width{ 0 }, height{ 0 }
