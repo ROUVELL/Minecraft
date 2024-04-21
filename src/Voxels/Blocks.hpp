@@ -1,5 +1,6 @@
 
 #include <cstdint>
+#include <string>
 #include <unordered_map>
 
 
@@ -8,12 +9,10 @@ using voxel_t = uint8_t;
 
 struct Block
 {
-    const voxel_t id;
-    const char* name;
+    const std::string name;  // unigue string name (air, dirt, grass, ...)
 
-    Block() : id(0), name("air") { }
-    Block(voxel_t id, const char* name)
-        : id(id), name(name) { }
+    Block() : name("empty") { }
+    Block(const std::string& name) : name(name) { }
 };
 
 
@@ -24,7 +23,7 @@ class Blocks
     Blocks() = default;
     ~Blocks() = default;
 
-    static void addBlock(voxel_t id, const char* name);
+    static void addBlock(voxel_t id, const std::string& name);
 
 public:
     static void initialize();
