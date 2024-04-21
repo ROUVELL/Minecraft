@@ -4,7 +4,7 @@
 
 LineBatch::LineBatch()
     : mesh({ 3, 4 }),
-    shader(loadShader("../res/shaders/line.glslv", "../res/shaders/line.glslf"))
+    shader("../res/shaders/line.glslv", "../res/shaders/line.glslf")
 {
 }
 
