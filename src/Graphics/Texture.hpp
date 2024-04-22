@@ -2,6 +2,8 @@
 
 #include <string>
 
+class Image;
+
 class Texture final
 {
 	unsigned int ID;
@@ -9,7 +11,10 @@ class Texture final
 
 public:
 	Texture();
-	Texture(unsigned int id, int w, int h);
+	Texture(const std::string& path);
+	Texture(const Image& image);
+	Texture(const Texture&) = delete;
+	Texture(Texture&&) noexcept;
 	~Texture() = default;
 
 	unsigned int getID() const { return ID; }
@@ -20,6 +25,3 @@ public:
 	void unbind();
 	void del();
 };
-
-
-Texture loadTexture(const std::string& file);
