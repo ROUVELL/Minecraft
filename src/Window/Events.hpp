@@ -12,6 +12,11 @@ constexpr uint KEY_S = 83;
 constexpr uint KEY_A = 65;
 constexpr uint KEY_D = 68;
 
+constexpr uint KEY_UP = 265;
+constexpr uint KEY_DOWN = 264;
+constexpr uint KEY_LEFT = 263;
+constexpr uint KEY_RIGHT = 262;
+
 constexpr uint MOUSE_BUTTON_LEFT = 0;
 constexpr uint MOUSE_BUTTON_RIGHT = 1;
 constexpr uint MOUSE_BUTTON_MIDDLE = 2;
