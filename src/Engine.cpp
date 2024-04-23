@@ -19,8 +19,8 @@ Engine::Engine()
     dt(16.6),
     frame(0)
 {
-    shaders.emplace("chunk", Shader("res/shaders/main.glslv", "res/shaders/main.glslf"));
-    textures.emplace("chunk", Texture("res/textures/grass.png"));
+    shaders.emplace("chunk", Shader("../res/shaders/main.glslv", "../res/shaders/main.glslf"));
+    textures.emplace("chunk", Texture("../res/textures/grass.png"));
 }
 
 Engine::~Engine()
@@ -97,10 +97,10 @@ void Engine::update()
             camera.moveDown(dt * speed);
 	}
     
-    glm::vec lookAt = camera.getPosition() + camera.getDirection();
-    lineBatch.line(lookAt, lookAt + glm::vec3(0.15, 0.0, 0.0), RED);
-    lineBatch.line(lookAt, lookAt + glm::vec3(0.0, 0.15, 0.0), GREEN);
-    lineBatch.line(lookAt, lookAt + glm::vec3(0.0, 0.0, 0.15), BLUE);
+    glm::vec lookAt = camera.getPosition() + camera.getDirection() * 0.2f;
+    lineBatch.line(lookAt, lookAt + glm::vec3(0.03, 0.0, 0.0), RED);
+    lineBatch.line(lookAt, lookAt + glm::vec3(0.0, 0.03, 0.0), GREEN);
+    lineBatch.line(lookAt, lookAt + glm::vec3(0.0, 0.0, 0.03), BLUE);
 
     // int cx = (int)camera.position.x / CHUNK_SIDE;
     // int cz = (int)camera.position.z / CHUNK_SIDE;

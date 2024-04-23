@@ -16,6 +16,7 @@ public:
 	Shader(Shader&& other) noexcept;
 	~Shader() = default;
 
+	void uniformFloat(const std::string& name, float value);
 	void uniformMatrix(const std::string& name, const glm::mat4& matrix);
 
 	void use();

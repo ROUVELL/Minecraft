@@ -6,6 +6,7 @@
 
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <string>
 
 
 bool loadFile(const std::string& path, std::string* dst)
@@ -102,6 +103,11 @@ unsigned int Shader::findUniformLoc(const std::string& name) const
 	return glGetUniformLocation(ID, name.c_str());
 }
 
+void Shader::uniformFloat(const std::string& name, float value)
+{
+	glUniform1f(findUniformLoc(name), value);
+}
+
 void Shader::uniformMatrix(const std::string& name, const glm::mat4& matrix)
 {
 	glUniformMatrix4fv(findUniformLoc(name), 1, GL_FALSE, glm::value_ptr(matrix));
@@ -115,4 +121,5 @@ void Shader::use()
 void Shader::del()
 {
 	glDeleteProgram(ID);
+	ID = 0;
 }
