@@ -6,11 +6,6 @@
 #include "Chunks.hpp"
 #include "../Graphics/Mesh.hpp"
 
-constexpr int CHUNK_SIDE = 16;
-constexpr int CHUNK_HEIGHT = 64;
-constexpr int CHUNK_AREA = CHUNK_SIDE * CHUNK_SIDE;
-constexpr int CHUNK_VOLUME = CHUNK_AREA * CHUNK_HEIGHT;
-
 using Generator = std::function<void(voxel_t*, int, int)>;
 
 inline bool isValidPosition(int vx, int vy, int vz) noexcept

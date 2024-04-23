@@ -4,6 +4,8 @@
 #include <math.h>
 #include <memory>
 
+#include <glm/gtc/noise.hpp>
+
 #include "Chunk.hpp"
 #include "../Graphics/Shader.hpp"
 
@@ -14,23 +16,26 @@ inline int floordiv(int a, int b) noexcept
 	return a / b;
 }
 
-Generator generator = [](voxel_t* voxels, int cx, int cz) -> void
+Generator flatGenerator = [](voxel_t* voxels, int, int) -> void
 {
-	// for (int lz = 0; lz < CHUNK_SIDE; ++lz)
-	// 	for (int lx = 0; lx < CHUNK_SIDE; ++lx)
-	// 	{
-	// 		int wx = lx + cx * CHUNK_SIDE;
-	// 		int wz = lz + cz * CHUNK_SIDE;
-
-	// 		int height = (int)(glm::simplex(glm::vec2(wx, wz) * 0.01f) * 16.0f + 32.0f);
-
-	// 		for (int ly = 0; ly < std::min(height, CHUNK_HEIGHT); ++ly)
-	// 			voxels[lx + ly * CHUNK_AREA + lz * CHUNK_SIDE] = 1 + ((cx << 2) ^ (cz << 6));
-	// 	}
-
 	for (int lz = 0; lz < CHUNK_SIDE; ++lz)
 		for (int lx = 0; lx < CHUNK_SIDE; ++lx)
-			voxels[lx + lz * CHUNK_SIDE] = 1; // + ((cx << 2) ^ (cz << 6));
+			voxels[lx + lz * CHUNK_SIDE] = 1;
+};
+
+Generator simplexGenerator = [](voxel_t* voxels, int cx, int cz) -> void
+{
+	for (int lz = 0; lz < CHUNK_SIDE; ++lz)
+		for (int lx = 0; lx < CHUNK_SIDE; ++lx)
+		{
+			int wx = lx + cx * CHUNK_SIDE;
+			int wz = lz + cz * CHUNK_SIDE;
+
+			int height = (int)(glm::simplex(glm::vec2(wx, wz) * 0.01f) * 16.0f + 32.0f);
+
+			for (int ly = 0; ly < std::min(height, CHUNK_HEIGHT); ++ly)
+				voxels[lx + ly * CHUNK_AREA + lz * CHUNK_SIDE] = 1 + ((cx << 2) ^ (cz << 6));
+	 	}
 };
 
 Chunks::Chunks()
@@ -43,21 +48,12 @@ Chunks::Chunks()
 Chunks::~Chunks()
 {
 	for (int index = 0; index < WORLD_AREA; ++index)
-	{
 		if (Chunk* chunk = chunks[index])
 		{
 			chunk->onDelete();
 			delete chunk;
 			chunks[index] = nullptr;
 		}
-	}
-}
-
-Chunk* Chunks::getChunkLocal(int cx, int cz) const
-{
-	if (isValidPosition(cx, cz))
-		return chunks[cx + cz * WORLD_SIZE];
-	return nullptr;
 }
 
 uint8_t Chunks::getVoxel(int wx, int wy, int wz) const
@@ -222,7 +218,7 @@ void Chunks::shift(int dx, int dz)
 		if (chunksTemp[index] == nullptr)
 		{
 			chunksTemp[index] = new Chunk(index % WORLD_SIZE + ox, index / WORLD_SIZE + oz, this);
-			chunksTemp[index]->generate(generator);
+			chunksTemp[index]->generate(flatGenerator);
 		}
 	
 	std::swap(chunks, chunksTemp);
@@ -272,7 +268,7 @@ void Chunks::update()
 		if (chunk == nullptr)
 		{
 			chunk = new Chunk(nearCx, nearCz, this);
-			chunk->generate(generator);
+			chunk->generate(flatGenerator);
 		}
 
 		else if (chunk->isModified())

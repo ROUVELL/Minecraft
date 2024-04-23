@@ -5,11 +5,7 @@
 
 #include <glm/fwd.hpp>
 
-constexpr int VISIBLE_CHUNKS_DISTANCE = 7;
-constexpr int WORLD_SIZE = VISIBLE_CHUNKS_DISTANCE + 2;
-constexpr int HALF_WORLD_SIZE = WORLD_SIZE / 2;
-constexpr int WORLD_AREA = WORLD_SIZE * WORLD_SIZE;
-constexpr int MAX_RAYCAST_DIST = 10;
+#include "../constants.hpp"
 
 using voxel_t = uint8_t;
 
@@ -37,11 +33,12 @@ class Chunks final
 	int ox, oz;
 
 	ChunkNeighboars neighboarsLocal(int cx, int cz) const { return { getChunkLocal(cx + 1, cz), getChunkLocal(cx - 1, cz), getChunkLocal(cx, cz + 1), getChunkLocal(cx, cz - 1)};}
-	Chunk* getChunkLocal(int cx, int cz) const;
+	Chunk* getChunkLocal(int cx, int cz) const { return isValidPosition(cx, cz) ? chunks[cx + cz * WORLD_SIZE] : nullptr; }
 
 public:
 	Chunks();
-	Chunks(const Chunk&) = delete;
+	Chunks(const Chunks&) = delete;
+	Chunks(Chunks&&) noexcept = delete;
 	~Chunks();
 
 	ChunkNeighboars neighboars(int cx, int cz) const { return { getChunk(cx + 1, cz), getChunk(cx - 1, cz), getChunk(cx, cz + 1), getChunk(cx, cz - 1) }; }

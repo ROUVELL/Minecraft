@@ -3,6 +3,11 @@
 #include "Mesh.hpp"
 #include "Shader.hpp"
 
+const glm::vec4 RED = glm::vec4(1.0, 0.0, 0.0, 1.0);
+const glm::vec4 GREEN = glm::vec4(0.0, 1.0, 0.0, 1.0);
+const glm::vec4 BLUE = glm::vec4(0.0, 0.0, 1.0, 1.0);
+const glm::vec4 BLACK = glm::vec4(0.0, 0.0, 0.0, 1.0);
+
 class LineBatch final
 {
     Mesh mesh;
