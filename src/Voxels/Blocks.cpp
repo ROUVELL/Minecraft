@@ -37,6 +37,11 @@ bool Blocks::exists(voxel_t id)
     return blocks.find(id) != blocks.end();
 }
 
+uint64_t Blocks::count()
+{
+    return blocks.size();
+}
+
 const Block& Blocks::getBlock(voxel_t id)
 {
     if (exists(id))

@@ -29,6 +29,7 @@ public:
     static void initialize();
 
     static bool exists(voxel_t id);
+    static uint64_t count();
 
     static const Block& getBlock(voxel_t id);
 };
