@@ -17,6 +17,9 @@ public:
 	Texture(Texture&&) noexcept;
 	~Texture() = default;
 
+	void fromFile(const std::string& path);
+	void fromImage(const Image& image);
+
 	unsigned int getID() const { return ID; }
 	int getWidth() const { return width; }
 	int getHeight() const { return height; }
