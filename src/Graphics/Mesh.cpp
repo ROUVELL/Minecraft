@@ -29,6 +29,12 @@ Mesh::Mesh(const std::vector<unsigned int>& attrs)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+Mesh::Mesh(Mesh&& other) noexcept
+	: VAO(other.VAO), VBO(other.VBO), IBO(other.IBO), count(other.count)
+{
+	other.VAO = other.VBO = other.IBO = other.count = 0;
+}
+
 void Mesh::build(const MeshData& data)
 {
 	count = data.indices.size();

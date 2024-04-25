@@ -24,6 +24,9 @@ class Mesh final
 
 public:
 	Mesh(const std::vector<unsigned int>& attrs);
+	Mesh(const Mesh&) = delete;  // It's probably not necessary.
+	Mesh(Mesh&& other) noexcept;
+	~Mesh() = default;
 
 	void build(const MeshData& data);
 	void render();
