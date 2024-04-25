@@ -1,6 +1,6 @@
 #include "ChunksRenderer.hpp"
 
-#include "../Window/Camera.hpp"
+#include "../Loaders/AssetsLoader.hpp"
 
 
 const glm::vec4 BLOCK_BOX_COLOR = glm::vec4(1.0, 1.0, 1.0, 0.6);
@@ -11,9 +11,7 @@ ChunksRenderer::ChunksRenderer(const std::shared_ptr<Chunks>& chunks,
                             const std::shared_ptr<Camera>& camera)
     : chunks(chunks),
     lineBatch(lineBatch),
-    camera(camera),
-    shader("../res/shaders/main.glslv", "../res/shaders/main.glslf"),
-    texture("../res/textures/grass.png")
+    camera(camera)
 {
 }
 
@@ -50,11 +48,13 @@ void ChunksRenderer::drawVoxelNormal(const glm::vec3& center, const glm::vec3& n
     lineBatch->line(center, center + normal, BLACK);
 }
 
-void ChunksRenderer::render()
+void ChunksRenderer::render(AssetsLoader& assets)
 {
-    shader.use();
-    shader.uniformMatrix("projview", camera->getProjViewMatrix());
-    texture.bind();
+    Shader* shader = assets.getShader("main");
+    shader->use();
+    shader->uniformMatrix("projview", camera->getProjViewMatrix());
 
-    chunks->render(shader);
+    assets.getTexture("grass")->bind();
+
+    chunks->render(*shader);
 }

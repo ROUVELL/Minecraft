@@ -11,8 +11,9 @@ class Shader final
 
 public:
 	Shader();
+	Shader(const std::string& path);
 	Shader(const std::string& vPath, const std::string& fPath);
-	Shader(const Shader&) = delete;
+	Shader(const Shader&) = delete;  // It's probably not necessary.
 	Shader(Shader&& other) noexcept;
 	~Shader() = default;
 

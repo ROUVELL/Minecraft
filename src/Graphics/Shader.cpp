@@ -56,6 +56,11 @@ Shader::Shader()
 {
 }
 
+Shader::Shader(const std::string& path)
+	: Shader(path + ".glslv", path + ".glslf")
+{
+}
+
 Shader::Shader(const std::string& vPath, const std::string& fPath)
 	: Shader()
 {

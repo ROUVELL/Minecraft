@@ -1,17 +1,15 @@
 #include "LineBatch.hpp"
 
-#include "Shader.hpp"
+#include "../Loaders/AssetsLoader.hpp"
 
 LineBatch::LineBatch()
-    : mesh({ 3, 4 }),
-    shader("../res/shaders/line.glslv", "../res/shaders/line.glslf")
+    : mesh({ 3, 4 })
 {
 }
 
 LineBatch::~LineBatch()
 {
     mesh.del();
-    shader.del();
 }
 
 void LineBatch::line(const glm::vec3& p1, const glm::vec3& p2, const glm::vec4& color)
@@ -64,10 +62,12 @@ void LineBatch::box(const glm::vec3& center, const glm::vec3& size, const glm::v
     line(sx + w, sy + h, sz, sx + w, sy + h, sz + d, r, g, b, a);
 }
 
-void LineBatch::render(const glm::mat4& projview)
+void LineBatch::render(AssetsLoader& assets, const glm::mat4& projview)
 {
-    shader.use();
-    shader.uniformMatrix("projview", projview);
+    Shader* shader = assets.getShader("line");
+    shader->use();
+    shader->uniformMatrix("projview", projview);
+
     mesh.build(meshData);
     mesh.render(0x0001);  // GL_LINES
 

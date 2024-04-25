@@ -1,10 +1,10 @@
 #include "Engine.hpp"
 
+#include <memory>
 #include <sstream>
 
 #include "Window/Window.hpp"
 #include "Window/Events.hpp"
-#include "Graphics/Shader.hpp"
 #include "Window/Camera.hpp"
 
 
@@ -20,11 +20,6 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-    for (auto& shader : shaders)
-        shader.second.del();
-
-    for (auto& texture : textures)
-        texture.second.del();
 }
 
 void Engine::updateDt()
@@ -104,8 +99,8 @@ void Engine::render()
     // chunksRenderer.drawChunkBox();
     chunksRenderer.drawWorldAxis();
 
-    chunksRenderer.render();
-    lineBatch->render(camera->getProjViewMatrix());
+    chunksRenderer.render(assets);
+    lineBatch->render(assets, camera->getProjViewMatrix());
 
     Window::swapBuffers();
 }

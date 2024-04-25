@@ -13,7 +13,7 @@ public:
 	Texture();
 	Texture(const std::string& path);
 	Texture(const Image& image);
-	Texture(const Texture&) = delete;
+	Texture(const Texture&) = delete;  // TODO: Probably need to implement a full copy of the texture (with a new ID of course)
 	Texture(Texture&&) noexcept;
 	~Texture() = default;
 
