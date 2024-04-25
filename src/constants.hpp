@@ -1,3 +1,5 @@
+#pragma once
+
 constexpr int CHUNK_SIDE = 16;
 constexpr int CHUNK_HEIGHT = 64;
 constexpr int CHUNK_AREA = CHUNK_SIDE * CHUNK_SIDE;

@@ -23,11 +23,13 @@ public:
 	static void setCursorVisible(bool flag);
 	static void setTitle(const char* title);
 
-	static void onSizeChanged(int newWidth, int newHeight);
+	static void onSizeChanged(int width, int height);
 
 	static void initialize(bool fullscreen, bool vsync);
 	static void uninitialize();
+
 	static void clear();
+	static void pollEvents();
 	static void swapBuffers();
 	static void close();
 
