@@ -18,6 +18,9 @@ void buildChunkMesh(const Chunk& chunk, MeshData* meshData)
 		index += 4;
 	};
 
+
+	ChunkNeighboars n = chunk.getNeighboars();
+
 	for (int y = 0; y < CHUNK_HEIGHT; ++y)
 		for (int z = 0; z < CHUNK_SIDE; ++z)
 			for (int x = 0; x < CHUNK_SIDE; ++x)
@@ -26,9 +29,6 @@ void buildChunkMesh(const Chunk& chunk, MeshData* meshData)
 
 				if (!id)
 					continue;
-
-				ChunkNeighboars n = chunk.getNeighboars();
-
 
 				if ((z + 1 != CHUNK_SIDE) ? chunk.empty(x, y, z + 1) : (n.front->at(x, y, 0) == 0))  // front face
 				{

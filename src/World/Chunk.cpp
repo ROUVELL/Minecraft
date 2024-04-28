@@ -9,6 +9,7 @@ Chunk::Chunk(int cx, int cz, const Chunks* chunks)
 	: chunks(chunks),
 	mesh({ 3, 2, 1 }),
 	position{cx, cz},
+	rebuildNeighboars(false),
 	modified(false)
 {
 	memset(voxels, 0, CHUNK_VOLUME);
@@ -26,14 +27,26 @@ void Chunk::setVoxel(int x, int y, int z, voxel_t id)
 	ChunkNeighboars n = getNeighboars();
 
 	if (x == 0 && n.left)
+	{
 		n.left->setModified();
+		setNeedRebuildNeighboars(true);
+	}
 	else if ((x + 1) == CHUNK_SIDE && n.right)
+	{
 		n.right->setModified();
+		setNeedRebuildNeighboars(true);
+	}
 
 	if (z == 0 && n.back)
+	{
 		n.back->setModified();
+		setNeedRebuildNeighboars(true);
+	}
 	else if ((z + 1) == CHUNK_SIDE && n.front)
+	{
 		n.front->setModified();
+		setNeedRebuildNeighboars(true);
+	}
 }
 
 void Chunk::generate(Generator generator)
@@ -49,6 +62,7 @@ void Chunk::buildMesh()
 	buildChunkMesh(*this, &meshData);
 
 	mesh.build(meshData);
+	
 	modified = false;
 }
 
@@ -58,14 +72,10 @@ void Chunk::onDelete()
 
 	ChunkNeighboars n = getNeighboars();
 
-	if (n.left)
-		n.left->setModified();
-	if (n.right)
-		n.right->setModified();
-	if (n.back)
-		n.back->setModified();
-	if (n.front)
-		n.front->setModified();
+	if (n.left ) n.left->setModified();
+	if (n.right) n.right->setModified();
+	if (n.back ) n.back->setModified();
+	if (n.front) n.front->setModified();
 }
 
 void Chunk::render()
