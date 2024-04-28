@@ -82,6 +82,28 @@ void Image::blit(uint32_t x, uint32_t y, const Image& img)
             }
 }
 
+
+Image Image::subImage(uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+{
+    Image sub(w, h, channels);
+
+    for (uint32_t localX = 0; localX < min(w, width - x); ++localX)
+        for (uint32_t localY = 0; localY < min( h, height - y); ++localY)
+        {
+            uint32_t srcIndex = (localX + x) * channels + (localY + y) * width * channels;
+            uint32_t dstIndex = localX * channels + localY * w * channels;
+            
+            sub.data[dstIndex] = data[srcIndex];
+            sub.data[dstIndex + 1] = data[srcIndex + 1];
+            sub.data[dstIndex + 2] = data[srcIndex + 2];
+
+            if (isRGBA())
+                sub.data[dstIndex + 3] = data[srcIndex + 3];
+        }
+
+    return sub;
+}
+
 Texture Image::makeTexture() const
 {
     return Texture(*this);

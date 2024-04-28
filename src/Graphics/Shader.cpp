@@ -108,12 +108,22 @@ unsigned int Shader::findUniformLoc(const std::string& name) const
 	return glGetUniformLocation(ID, name.c_str());
 }
 
-void Shader::uniformFloat(const std::string& name, float value)
+void Shader::uniformFloat(const std::string& name, float v1)
 {
-	glUniform1f(findUniformLoc(name), value);
+	glUniform1f(findUniformLoc(name), v1);
 }
 
-void Shader::uniformMatrix(const std::string& name, const glm::mat4& matrix)
+void Shader::uniformFloat(const std::string& name, float v1, float v2)
+{
+	glUniform2f(findUniformLoc(name), v1, v2);
+}
+
+void Shader::uniformFloat(const std::string& name, float v1, float v2, float v3)
+{
+	glUniform3f(findUniformLoc(name), v1, v2, v3);
+}
+
+void Shader::uniformMat4(const std::string& name, const glm::mat4& matrix)
 {
 	glUniformMatrix4fv(findUniformLoc(name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
