@@ -1,13 +1,10 @@
 #pragma once
 
 #include <vector>
-#include <cstdint>
-
 #include <glm/fwd.hpp>
 
 #include "../constants.hpp"
-
-using voxel_t = uint8_t;
+#include "../typedefs.hpp"
 
 inline bool isValidPosition(int cx, int cz) noexcept
 {
@@ -34,6 +31,7 @@ class Chunks final
 
 	ChunkNeighboars neighboarsLocal(int cx, int cz) const { return { getChunkLocal(cx + 1, cz), getChunkLocal(cx - 1, cz), getChunkLocal(cx, cz + 1), getChunkLocal(cx, cz - 1)};}
 	Chunk* getChunkLocal(int cx, int cz) const { return isValidPosition(cx, cz) ? chunks[cx + cz * WORLD_SIZE] : nullptr; }
+	Chunk* getNearestModified() const;
 
 public:
 	Chunks();

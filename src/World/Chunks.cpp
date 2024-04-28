@@ -1,42 +1,11 @@
 #include "Chunks.hpp"
 
 #include <limits>
-#include <math.h>
-#include <memory>
-
-#include <glm/gtc/noise.hpp>
 
 #include "Chunk.hpp"
+#include "Generators.hpp"
 #include "../Graphics/Shader.hpp"
-
-inline int floordiv(int a, int b) noexcept
-{
-	if (a < 0 && a % b)
-		return (a / b) - 1;
-	return a / b;
-}
-
-Generator flatGenerator = [](voxel_t* voxels, int, int) -> void
-{
-	for (int lz = 0; lz < CHUNK_SIDE; ++lz)
-		for (int lx = 0; lx < CHUNK_SIDE; ++lx)
-			voxels[lx + lz * CHUNK_SIDE] = 1;
-};
-
-Generator simplexGenerator = [](voxel_t* voxels, int cx, int cz) -> void
-{
-	for (int lz = 0; lz < CHUNK_SIDE; ++lz)
-		for (int lx = 0; lx < CHUNK_SIDE; ++lx)
-		{
-			int wx = lx + cx * CHUNK_SIDE;
-			int wz = lz + cz * CHUNK_SIDE;
-
-			int height = (int)(glm::simplex(glm::vec2(wx, wz) * 0.01f) * 16.0f + 32.0f);
-
-			for (int ly = 0; ly < std::min(height, CHUNK_HEIGHT); ++ly)
-				voxels[lx + ly * CHUNK_AREA + lz * CHUNK_SIDE] = 1 + ((cx << 2) ^ (cz << 6));
-	 	}
-};
+#include "../math.hpp"
 
 Chunks::Chunks()
 	: chunks(WORLD_AREA, nullptr),
@@ -54,6 +23,30 @@ Chunks::~Chunks()
 			delete chunk;
 			chunks[index] = nullptr;
 		}
+}
+
+Chunk* Chunks::getNearestModified() const
+{
+	int minDist = std::numeric_limits<int>::max();
+	Chunk* nearest = nullptr;
+
+	for (int cx = 1; cx < WORLD_SIZE - 1; ++cx)
+		for (int cz = 1; cz < WORLD_SIZE - 1; ++cz)
+		{
+			int index = cx + cz * WORLD_SIZE;
+
+			if (chunks[index]->isModified())
+			{
+				int dist = std::abs(cx - HALF_WORLD_SIZE) + std::abs(cz - HALF_WORLD_SIZE);
+				if (dist < minDist)
+				{
+					minDist = dist;
+					nearest = chunks[index];
+				}
+			}
+		}
+
+	return nearest;
 }
 
 uint8_t Chunks::getVoxel(int wx, int wy, int wz) const
@@ -240,43 +233,23 @@ void Chunks::centeredAt(int wx, int wz)
 
 void Chunks::update()
 {
-	int minDist = std::numeric_limits<int>::max();
-	int nearCx = 0;
-	int nearCz = 0;
-
-	for (int cx = 1; cx < WORLD_SIZE - 1; ++cx)
-		for (int cz = 1; cz < WORLD_SIZE - 1; ++cz)
-		{
-			int index = cx + cz * WORLD_SIZE;
-
-			if (!chunks[index] || chunks[index]->isModified())
-			{
-				int dist = std::abs(cx - HALF_WORLD_SIZE) + std::abs(cz - HALF_WORLD_SIZE);
-				if (dist < minDist)
-				{
-					minDist = dist;
-					nearCx = cx;
-					nearCz = cz;
-				}
-			}
-		}
-
-	if (minDist < std::numeric_limits<int>::max())
+	if (Chunk* nearest = getNearestModified())
 	{
-		Chunk* chunk = chunks[nearCx + nearCz * WORLD_SIZE];
+		ChunkNeighboars n = nearest->getNeighboars();
 
-		if (chunk == nullptr)
+		if (n.right && n.left && n.front && n.back)
 		{
-			chunk = new Chunk(nearCx, nearCz, this);
-			chunk->generate(flatGenerator);
-		}
+			nearest->buildMesh();
 
-		else if (chunk->isModified())
-		{
-			ChunkNeighboars n = neighboarsLocal(nearCx, nearCz);
+			if (nearest->needRebuildNeighboars())
+			{
+				nearest->setNeedRebuildNeighboars(false);
 
-			if (n.right && n.left && n.front && n.back)
-				chunk->buildMesh();
+				if (n.right->isModified()) n.right->buildMesh();
+				if (n.left ->isModified()) n.left->buildMesh();
+				if (n.front->isModified()) n.front->buildMesh();
+				if (n.back ->isModified()) n.back->buildMesh();
+			}
 		}
 	}
 }
@@ -285,8 +258,8 @@ void Chunks::render(Shader& shader)
 {
 	for (int cx = 1; cx < WORLD_SIZE - 1; ++cx)
 		for (int cz = 1; cz < WORLD_SIZE - 1; ++cz)
-			if (Chunk* chunk = chunks[cx + cz * WORLD_SIZE])
 			{
+				Chunk* chunk = chunks[cx + cz * WORLD_SIZE];
 				shader.uniformMatrix("model", chunk->getModelMatrix());
 				chunk->render();
 			}
