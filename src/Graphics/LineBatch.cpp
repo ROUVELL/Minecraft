@@ -66,7 +66,7 @@ void LineBatch::render(AssetsLoader& assets, const glm::mat4& projview)
 {
     Shader* shader = assets.getShader("line");
     shader->use();
-    shader->uniformMatrix("projview", projview);
+    shader->uniformMat4("projview", projview);
 
     mesh.build(meshData);
     mesh.render(0x0001);  // GL_LINES

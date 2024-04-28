@@ -47,8 +47,8 @@ public:
 
     /* If isRGB return true alpha will be ignored */
     void setPixel(uint32_t x, uint32_t y, const Color color);
-
     void blit(uint32_t x, uint32_t y, const Image& img);
+    Image subImage(uint32_t x, uint32_t y, uint32_t w, uint32_t h);
 
     Texture makeTexture() const; 
 

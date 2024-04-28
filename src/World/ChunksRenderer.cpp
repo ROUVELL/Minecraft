@@ -52,7 +52,7 @@ void ChunksRenderer::render(AssetsLoader& assets)
 {
     Shader* shader = assets.getShader("main");
     shader->use();
-    shader->uniformMatrix("projview", camera->getProjViewMatrix());
+    shader->uniformMat4("projview", camera->getProjViewMatrix());
 
     assets.getTexture("grass")->bind();
 

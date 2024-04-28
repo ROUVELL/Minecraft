@@ -260,7 +260,7 @@ void Chunks::render(Shader& shader)
 		for (int cz = 1; cz < WORLD_SIZE - 1; ++cz)
 			{
 				Chunk* chunk = chunks[cx + cz * WORLD_SIZE];
-				shader.uniformMatrix("model", chunk->getModelMatrix());
+				shader.uniformMat4("model", chunk->getModelMatrix());
 				chunk->render();
 			}
 }
