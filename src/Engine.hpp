@@ -1,22 +1,19 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
+#include <memory>
 
-#include "Window/Camera.hpp"
-#include "Graphics/Shader.hpp"
-#include "Graphics/Texture.hpp"
-#include "Graphics/LineBatch.hpp"
-#include "World/Chunks.hpp"
+#include "World/ChunksRenderer.hpp"
+#include "Loaders/AssetsLoader.hpp"
 
 class Engine final
 {
-    Camera camera;
-    Chunks chunks;
-    LineBatch lineBatch;
+    std::shared_ptr<Camera> camera;
+    std::shared_ptr<Chunks> chunks;
+    std::shared_ptr<LineBatch> lineBatch;
+    
+    AssetsLoader assets;
 
-    std::unordered_map<std::string, Texture> textures;
-    std::unordered_map<std::string, Shader> shaders;
+    ChunksRenderer chunksRenderer;
 
     double dt;
     uint64_t frame;

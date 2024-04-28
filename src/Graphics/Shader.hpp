@@ -11,13 +11,15 @@ class Shader final
 
 public:
 	Shader();
-	Shader(unsigned int id);
+	Shader(const std::string& path);
+	Shader(const std::string& vPath, const std::string& fPath);
+	Shader(const Shader&) = delete;  // It's probably not necessary.
+	Shader(Shader&& other) noexcept;
 	~Shader() = default;
 
+	void uniformFloat(const std::string& name, float value);
 	void uniformMatrix(const std::string& name, const glm::mat4& matrix);
 
 	void use();
 	void del();
 };
-
-Shader loadShader(const std::string& vertexFileName, const std::string& fragmentFileName);
