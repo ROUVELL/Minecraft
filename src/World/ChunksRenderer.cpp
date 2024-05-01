@@ -1,19 +1,19 @@
 #include "ChunksRenderer.hpp"
 
+#include "Chunk.hpp"
+#include "../math.hpp"
 #include "../Window/Camera.hpp"
+#include "../Graphics/LineBatch.hpp"
+#include "../Loaders/AssetsLoader.hpp"
 
 
 const glm::vec4 BLOCK_BOX_COLOR = glm::vec4(1.0, 1.0, 1.0, 0.6);
 
 
-ChunksRenderer::ChunksRenderer(const std::shared_ptr<Chunks>& chunks,
-                            const std::shared_ptr<LineBatch>& lineBatch,
-                            const std::shared_ptr<Camera>& camera)
+ChunksRenderer::ChunksRenderer(Chunks* const chunks, LineBatch* const lineBatch, Camera* const camera)
     : chunks(chunks),
     lineBatch(lineBatch),
-    camera(camera),
-    shader("../res/shaders/main.glslv", "../res/shaders/main.glslf"),
-    texture("../res/textures/grass.png")
+    camera(camera)
 {
 }
 
@@ -28,10 +28,8 @@ void ChunksRenderer::drawWorldAxis()
 
 void ChunksRenderer::drawChunkBox()
 {
-    int cx = (int)camera->getPosition().x / CHUNK_SIDE;
-    int cz = (int)camera->getPosition().z / CHUNK_SIDE;
-    if (camera->getPosition().x < 0.0f) --cx;
-    if (camera->getPosition().z < 0.0f) --cz;
+    int cx = floordiv(camera->getPosition().x, CHUNK_SIDE);
+    int cz = floordiv(camera->getPosition().z, CHUNK_SIDE);
 
     const float x = cx * CHUNK_SIDE + (CHUNK_SIDE * 0.5f);
     const float z = cz * CHUNK_SIDE + (CHUNK_SIDE * 0.5f);
@@ -46,15 +44,16 @@ void ChunksRenderer::drawVoxelBox(const glm::vec3& center)
 
 void ChunksRenderer::drawVoxelNormal(const glm::vec3& center, const glm::vec3& normal)
 {
-
     lineBatch->line(center, center + normal, BLACK);
 }
 
-void ChunksRenderer::render()
+void ChunksRenderer::render(AssetsLoader& assets)
 {
-    shader.use();
-    shader.uniformMatrix("projview", camera->getProjViewMatrix());
-    texture.bind();
+    Shader* shader = assets.getShader("main");
+    shader->use();
+    shader->uniformMat4("projview", camera->getProjViewMatrix());
 
-    chunks->render(shader);
+    assets.getTexture("grass")->bind();
+
+    chunks->render(*shader);
 }

@@ -1,23 +1,25 @@
 #pragma once
 
-#include <memory>
-#include <string>
-#include <unordered_map>
-
+#include "Window/Camera.hpp"
+#include "World/Chunk.hpp"
 #include "World/ChunksRenderer.hpp"
+#include "Loaders/AssetsLoader.hpp"
+#include "Graphics/LineBatch.hpp"
+#include "Graphics/TextBatch.hpp"
 
 class Engine final
 {
-    std::shared_ptr<Camera> camera;
-    std::shared_ptr<Chunks> chunks;
-    std::shared_ptr<LineBatch> lineBatch;
-
+    Camera camera;
+    Chunks chunks;
     ChunksRenderer chunksRenderer;
 
-    std::unordered_map<std::string, Texture> textures;
-    std::unordered_map<std::string, Shader> shaders;
+    LineBatch lineBatch;
+    TextBatch textBatch;
+    
+    AssetsLoader assets;
 
     double dt;
+    unsigned int fps;
     uint64_t frame;
 
     void updateDt();
@@ -31,6 +33,7 @@ public:
 
     double getDt() const { return dt; }
     uint64_t getFrame() const { return frame; }
+    unsigned int getFps() const { return fps; }
 
     void run();
     void stop();

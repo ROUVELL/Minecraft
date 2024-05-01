@@ -18,6 +18,25 @@ Texture::Texture()
 Texture::Texture(const std::string& path)
 	: Texture()
 {
+	fromFile(path);
+}
+
+Texture::Texture(const Image& image)
+	: Texture()
+{
+	fromImage(image);
+}
+
+Texture::Texture(Texture&& other) noexcept
+	: ID(other.ID), width(other.width), height(other.height)
+{
+}
+
+void Texture::fromFile(const std::string& path)
+{
+	if (ID != 0)
+		del();
+
 	int channels;
 	unsigned char* bytes = stbi_load(path.c_str(), &width, &height, &channels, 0);
 
@@ -36,9 +55,11 @@ Texture::Texture(const std::string& path)
 	stbi_image_free(bytes);
 }
 
-Texture::Texture(const Image& image)
-	: Texture()
+void Texture::fromImage(const Image& image)
 {
+	if (ID != 0)
+		del();
+
 	width = image.getWidth();
 	height = image.getHeight();
 
@@ -57,11 +78,6 @@ Texture::Texture(const Image& image)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-Texture::Texture(Texture&& other) noexcept
-	: ID(other.ID), width(other.width), height(other.height)
-{
-}
-
 void Texture::bind()
 {
 	glBindTexture(GL_TEXTURE_2D, ID);
@@ -75,4 +91,5 @@ void Texture::unbind()
 void Texture::del()
 {
 	glDeleteTextures(1, &ID);
+	ID = width = height = 0;
 }

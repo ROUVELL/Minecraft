@@ -1,5 +1,6 @@
 
 #include "Camera.hpp"
+#include <glm/trigonometric.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/rotate_vector.hpp>
@@ -13,7 +14,7 @@ Camera::Camera(const glm::vec3& pos, float fov)
 	: position( pos ),
 	  direction( 0.0, 0.0, -1.0 ),
 	  right( 1, 0, 0 ),
-	  fov( fov ),
+	  fov( glm::radians(fov) ),
 	  proj( 1.0f )
 {
 	updateProjMatrix();
@@ -21,23 +22,23 @@ Camera::Camera(const glm::vec3& pos, float fov)
 
 void Camera::updateProjMatrix()
 {
-	proj = glm::perspective(fov, Window::getAspect(), 0.1f, 1000.0f);
+	proj = glm::perspectiveRH_ZO(fov, Window::getAspect(), 0.1f, 1000.0f);
 }
 
 glm::mat4 Camera::getProjViewMatrix() const
 {
-	return proj * glm::lookAt(position, position + direction, UP_VEC);
+	return proj * glm::lookAtRH(position, position + direction, UP_VEC);
 }
 
 void Camera::yaw(float value)
 {
-	direction = glm::rotate(direction, -value, UP_VEC);
+	direction = glm::rotate(direction, value, UP_VEC);
 	right = glm::normalize(glm::cross(direction, UP_VEC));
 }
 
 void Camera::pitch(float value)
 {
-	glm::vec3 newDirection = glm::rotate(direction, -value, right);
+	glm::vec3 newDirection = glm::rotate(direction, value, right);
 
 	if (glm::angle(newDirection, UP_VEC) > glm::radians(1.0) && glm::angle(newDirection, -UP_VEC) > glm::radians(1.0))
 		direction = newDirection;

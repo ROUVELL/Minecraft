@@ -1,24 +1,20 @@
-#include <memory>
+#pragma once
 
-#include "../Window/Camera.hpp"
-#include "../Graphics/Texture.hpp"
-#include "../Graphics/Shader.hpp"
-#include "../Graphics/LineBatch.hpp"
-#include "Chunk.hpp"
+#include <glm/fwd.hpp>
+
+class Chunks;
+class LineBatch;
+class Camera;
+class AssetsLoader;
 
 class ChunksRenderer
 {
-    std::shared_ptr<Chunks> chunks;
-    std::shared_ptr<LineBatch> lineBatch;
-    std::shared_ptr<Camera> camera;
-
-    Shader shader;
-    Texture texture;
+    Chunks* const chunks;
+    LineBatch* const lineBatch;
+    Camera* const camera;
 
 public:
-    ChunksRenderer(const std::shared_ptr<Chunks>& chunks,
-                    const std::shared_ptr<LineBatch>& lineBatch,
-                    const std::shared_ptr<Camera>& camera);
+    ChunksRenderer(Chunks* const chunks, LineBatch* const lineBatch, Camera* const camera);
     ChunksRenderer(const ChunksRenderer&) = delete;
     ChunksRenderer(ChunksRenderer&&) noexcept = delete;
     ~ChunksRenderer() = default;
@@ -28,5 +24,5 @@ public:
     void drawVoxelBox(const glm::vec3& center);
     void drawVoxelNormal(const glm::vec3& center, const glm::vec3& normal);
     
-    void render();
+    void render(AssetsLoader& assets);
 };

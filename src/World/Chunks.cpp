@@ -54,8 +54,8 @@ uint8_t Chunks::getVoxel(int wx, int wy, int wz) const
 	if (wy < 0 || wy >= CHUNK_HEIGHT)
 		return 0;
 
-	int cx = floordiv(wx, CHUNK_SIDE);
-	int cz = floordiv(wz, CHUNK_SIDE);
+	int cx = modfloordiv(wx, CHUNK_SIDE);
+	int cz = modfloordiv(wz, CHUNK_SIDE);
 
 	const Chunk* const chunk = getChunk(cx, cz);
 
@@ -73,8 +73,8 @@ void Chunks::setVoxel(int wx, int wy, int wz, voxel_t id)
 	if (wy < 0 || wy >= CHUNK_HEIGHT)
 		return;
 
-	int cx = floordiv(wx, CHUNK_SIDE);
-	int cz = floordiv(wz, CHUNK_SIDE);
+	int cx = modfloordiv(wx, CHUNK_SIDE);
+	int cz = modfloordiv(wz, CHUNK_SIDE);
 
 	Chunk* chunk = getChunk(cx, cz);
 
@@ -222,8 +222,8 @@ void Chunks::shift(int dx, int dz)
 
 void Chunks::centeredAt(int wx, int wz)
 {
-	int cx = floordiv(wx, CHUNK_SIDE);
-	int cz = floordiv(wz, CHUNK_SIDE);
+	int cx = modfloordiv(wx, CHUNK_SIDE);
+	int cz = modfloordiv(wz, CHUNK_SIDE);
 
 	int offsetX = cx - (WORLD_SIZE / 2);
 	int offsetZ = cz - (WORLD_SIZE / 2);
@@ -258,10 +258,10 @@ void Chunks::render(Shader& shader)
 {
 	for (int cx = 1; cx < WORLD_SIZE - 1; ++cx)
 		for (int cz = 1; cz < WORLD_SIZE - 1; ++cz)
-			{
-				Chunk* chunk = chunks[cx + cz * WORLD_SIZE];
-				shader.uniformMatrix("model", chunk->getModelMatrix());
-				chunk->render();
-			}
+		{
+			Chunk* chunk = chunks[cx + cz * WORLD_SIZE];
+			shader.uniformMat4("model", chunk->getModelMatrix());
+			chunk->render();
+		}
 }
 

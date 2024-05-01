@@ -6,10 +6,18 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "Keyboard.hpp"
+#include "Mouse.hpp"
+
+
+void windowSizeCallback(GLFWwindow*, int width, int height);
+
 
 GLFWwindow* Window::window = nullptr;
 int Window::width = 1920;
 int Window::height = 1020;
+float Window::pixelWidth = 2.0f / Window::width;
+float Window::pixelHeight = 2.0f / Window::height;
 
 bool Window::isOpen()
 {
@@ -31,14 +39,14 @@ void Window::setTitle(const char* title)
 	glfwSetWindowTitle(window, title);
 }
 
-void Window::onSizeChanged(int newWidth, int newHeight)
+void Window::onSizeChanged(int width, int height)
 {
-	int FbWidth, FbWeight;
-	glfwGetFramebufferSize(window, &FbWidth, &FbWeight);
-	glViewport(0, 0, FbWidth, FbWeight);
+	glViewport(0, 0, width, height);
 
-	Window::width = newWidth;
-	Window::height = newHeight;
+	Window::width = width;
+	Window::height = height;
+	Window::pixelWidth = 2.0 / width;
+	Window::pixelHeight = 2.0 / height;
 }
 
 void Window::initialize(bool fullscreen, bool vsinc)
@@ -56,11 +64,7 @@ void Window::initialize(bool fullscreen, bool vsinc)
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
 	if (fullscreen)
-	{
-		width = 1920;
-		height = 1080;
 		window = glfwCreateWindow(width, height, "Voxel Engine", glfwGetPrimaryMonitor(), nullptr);
-	}
 	else
     	window = glfwCreateWindow(width, height, "Voxel Engine", nullptr, nullptr);
 
@@ -70,6 +74,11 @@ void Window::initialize(bool fullscreen, bool vsinc)
         glfwTerminate();
         return;
     }
+
+	Keyboard::initialize();
+	Mouse::initialize();
+
+	glfwSetWindowSizeCallback(Window::getInstance(), windowSizeCallback);
 
     glfwSwapInterval(vsinc ? 1 : 0);
     glfwMakeContextCurrent(window);
@@ -82,9 +91,7 @@ void Window::initialize(bool fullscreen, bool vsinc)
     	return;
     }
 
-    int FbWidth, FbWeight;
-	glfwGetFramebufferSize(window, &FbWidth, &FbWeight);
-	glViewport(0, 0, FbWidth, FbWeight);
+	glViewport(0, 0, width, height);
 
     glClearColor(0.4, 0.4, 0.4, 1.0);
     glEnable(GL_DEPTH_TEST);
@@ -106,6 +113,13 @@ void Window::clear()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void Window::pollEvents()
+{
+	Keyboard::update();
+	Mouse::update();
+	glfwPollEvents();
+}
+
 void Window::swapBuffers()
 {
 	glfwSwapBuffers(window);
@@ -117,3 +131,7 @@ void Window::close()
 }
 
 
+void windowSizeCallback(GLFWwindow*, int width, int height)
+{
+	Window::onSizeChanged(width, height);
+}

@@ -3,13 +3,9 @@
 #include <cstring>
 
 #include "../vendors/stb/stb_image.hpp"
+#include "../math.hpp"
 #include "Texture.hpp"
 
-
-inline uint32_t min(uint32_t a, uint32_t b) noexcept
-{
-    return (a < b) ? a : b;
-}
 
 Image::Image()
     : data(nullptr), width(0), height(0), channels(0)
@@ -25,7 +21,7 @@ Image::Image(uint32_t width, uint32_t height, uint32_t channels)
     : width(width), height(height), channels(channels)
 {
     data = new uint8_t[width * height * channels];
-    memset(data, 0, width * height * channels);
+    memset(data, 255, width * height * channels);
 }
 
 Image::Image(const Image& other)
@@ -80,6 +76,28 @@ void Image::blit(uint32_t x, uint32_t y, const Image& img)
                 if (isRGBA())
                     data[dstIndex + 3] = img.data[srcIndex + 3];
             }
+}
+
+
+Image Image::subImage(uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+{
+    Image sub(w, h, channels);
+
+    for (uint32_t localX = 0; localX < min(w, width - x); ++localX)
+        for (uint32_t localY = 0; localY < min( h, height - y); ++localY)
+        {
+            uint32_t srcIndex = (localX + x) * channels + (localY + y) * width * channels;
+            uint32_t dstIndex = localX * channels + localY * w * channels;
+            
+            sub.data[dstIndex] = data[srcIndex];
+            sub.data[dstIndex + 1] = data[srcIndex + 1];
+            sub.data[dstIndex + 2] = data[srcIndex + 2];
+
+            if (isRGBA())
+                sub.data[dstIndex + 3] = data[srcIndex + 3];
+        }
+
+    return sub;
 }
 
 Texture Image::makeTexture() const
