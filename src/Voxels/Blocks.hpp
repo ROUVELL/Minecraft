@@ -1,10 +1,9 @@
+#pragma once
 
-#include <cstdint>
 #include <string>
 #include <unordered_map>
 
-
-using voxel_t = uint8_t;
+#include "../typedefs.hpp"
 
 
 struct Block
