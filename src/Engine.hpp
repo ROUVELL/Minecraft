@@ -1,21 +1,25 @@
 #pragma once
 
-#include <memory>
-
+#include "Window/Camera.hpp"
+#include "World/Chunk.hpp"
 #include "World/ChunksRenderer.hpp"
 #include "Loaders/AssetsLoader.hpp"
+#include "Graphics/LineBatch.hpp"
+#include "Graphics/TextBatch.hpp"
 
 class Engine final
 {
-    std::shared_ptr<Camera> camera;
-    std::shared_ptr<Chunks> chunks;
-    std::shared_ptr<LineBatch> lineBatch;
+    Camera camera;
+    Chunks chunks;
+    ChunksRenderer chunksRenderer;
+
+    LineBatch lineBatch;
+    TextBatch textBatch;
     
     AssetsLoader assets;
 
-    ChunksRenderer chunksRenderer;
-
     double dt;
+    unsigned int fps;
     uint64_t frame;
 
     void updateDt();
@@ -29,6 +33,7 @@ public:
 
     double getDt() const { return dt; }
     uint64_t getFrame() const { return frame; }
+    unsigned int getFps() const { return fps; }
 
     void run();
     void stop();

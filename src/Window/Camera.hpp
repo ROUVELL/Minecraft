@@ -1,6 +1,8 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/matrix.hpp>
+#include <glm/trigonometric.hpp>
 
 class Camera
 {
@@ -34,7 +36,7 @@ public:
 	void setPosition(float x, float y, float z) { position = {x, y, z}; }
 	void setDirection(const glm::vec3 newDirection) { direction = glm::normalize(newDirection); }
 	void setDirection(float x, float y, float z) { direction = glm::normalize(glm::vec3(x, y, z)); }
-	void setFOV(float newFov) { fov = newFov; updateProjMatrix(); }
+	void setFOV(float newFov) { fov = glm::radians(newFov); updateProjMatrix(); }
 
 	glm::mat4 getProjViewMatrix() const;
 };

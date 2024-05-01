@@ -3,13 +3,9 @@
 #include <cstring>
 
 #include "../vendors/stb/stb_image.hpp"
+#include "../math.hpp"
 #include "Texture.hpp"
 
-
-inline uint32_t min(uint32_t a, uint32_t b) noexcept
-{
-    return (a < b) ? a : b;
-}
 
 Image::Image()
     : data(nullptr), width(0), height(0), channels(0)
@@ -25,7 +21,7 @@ Image::Image(uint32_t width, uint32_t height, uint32_t channels)
     : width(width), height(height), channels(channels)
 {
     data = new uint8_t[width * height * channels];
-    memset(data, 0, width * height * channels);
+    memset(data, 255, width * height * channels);
 }
 
 Image::Image(const Image& other)
