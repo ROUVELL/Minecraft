@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <glm/fwd.hpp>
 
 #include "../constants.hpp"
 #include "../typedefs.hpp"
@@ -44,8 +43,6 @@ public:
 	voxel_t getVoxel(int x, int y, int z) const;
 
 	void setVoxel(int x, int y, int z, voxel_t id);
-
-	voxel_t rayCast(glm::vec3 start, glm::vec3 dir, glm::vec3* end, glm::vec3* norm, glm::vec3* iend) const;
 
 	void shift(int dx, int dz);
 	void centeredAt(int wx, int wz);

@@ -1,16 +1,16 @@
 #pragma once
 
-#include "Window/Camera.hpp"
 #include "World/Chunk.hpp"
 #include "World/ChunksRenderer.hpp"
+#include "World/Entity/Player.hpp"
 #include "Loaders/AssetsLoader.hpp"
 #include "Graphics/LineBatch.hpp"
 #include "Graphics/TextBatch.hpp"
 
 class Engine final
 {
-    Camera camera;
     Chunks chunks;
+    Player player;
     ChunksRenderer chunksRenderer;
 
     LineBatch lineBatch;
