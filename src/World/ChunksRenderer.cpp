@@ -10,7 +10,7 @@
 const glm::vec4 BLOCK_BOX_COLOR = glm::vec4(1.0, 1.0, 1.0, 0.6);
 
 
-ChunksRenderer::ChunksRenderer(Chunks* const chunks, LineBatch* const lineBatch, Camera* const camera)
+ChunksRenderer::ChunksRenderer(Chunks* const chunks, LineBatch* const lineBatch, const Camera* const camera)
     : chunks(chunks),
     lineBatch(lineBatch),
     camera(camera)

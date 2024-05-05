@@ -11,10 +11,10 @@ class ChunksRenderer
 {
     Chunks* const chunks;
     LineBatch* const lineBatch;
-    Camera* const camera;
+    const Camera* const camera;
 
 public:
-    ChunksRenderer(Chunks* const chunks, LineBatch* const lineBatch, Camera* const camera);
+    ChunksRenderer(Chunks* const chunks, LineBatch* const lineBatch, const Camera* const camera);
     ChunksRenderer(const ChunksRenderer&) = delete;
     ChunksRenderer(ChunksRenderer&&) noexcept = delete;
     ~ChunksRenderer() = default;
