@@ -5,12 +5,10 @@
 #include "../vendors/stb/stb_image.hpp"
 #include "Image.hpp"
 
-
-GLenum int2enum(uint32_t channels)
+inline constexpr GLenum int2enum(uint32_t channels) noexcept
 {
 	return (channels == 4) ? GL_RGBA : (channels == 3) ? GL_RGB : GL_RED;
 }
-
 
 Texture::Texture()
 	: ID{ 0 }, width{ 0 }, height{ 0 }
@@ -50,6 +48,7 @@ void Texture::fromFile(const std::string& path)
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 5);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -80,12 +79,12 @@ void Texture::fromImage(const Image& image)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::bind()
+void Texture::bind() const
 {
 	glBindTexture(GL_TEXTURE_2D, ID);
 }
 
-void Texture::unbind()
+void Texture::unbind() const
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

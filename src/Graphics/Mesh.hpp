@@ -29,8 +29,8 @@ public:
 	~Mesh() = default;
 
 	void build(const MeshData& data);
-	void render();
-	void render(unsigned int mode);
+	void render() const;
+	void render(unsigned int mode) const;
 
 	void del();
 };

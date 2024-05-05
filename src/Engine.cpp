@@ -2,25 +2,26 @@
 
 #include <memory>
 #include <sstream>
+#include <string>
 
+#include "World/Raycasting.hpp"
+#include "Voxels/Blocks.hpp"
 #include "Window/Window.hpp"
 #include "Window/Keyboard.hpp"
 #include "Window/Mouse.hpp"
-#include "Window/Camera.hpp"
+#include "Gui/Label.hpp"
 
 
 Engine::Engine()
-    : camera(std::make_shared<Camera>(glm::vec3(0.0, 60.0, 0.0), glm::radians(70.0f))),
-    chunks(std::make_shared<Chunks>()),
-    lineBatch(std::make_shared<LineBatch>()),
-    chunksRenderer(chunks, lineBatch, camera),
+    : player(&chunks, glm::vec3(0.0, 10.0, 0.0)),
+    chunksRenderer(&chunks, &lineBatch, player.getCamera()),
     dt(16.6),
+    fps(60),
     frame(0)
 {
-}
-
-Engine::~Engine()
-{
+    Mouse::setCursorLock(true);
+    
+    Blocks::initialize(atlas);
 }
 
 void Engine::updateDt()
@@ -31,12 +32,12 @@ void Engine::updateDt()
     dt = currTime - lastTime;
     lastTime = currTime;
 
-    glm::vec3 camPos = camera->getPosition();
-
-    std::ostringstream title;
-    title << "FPS: " << std::to_string((1.0 / dt));
-    title << "  Position: [" << camPos.x << ", " << camPos.y << ", " << camPos.z << "]  ";
-    Window::setTitle(title.str().c_str());
+    static double lastUpdate = 0.0;
+    if (currTime - lastUpdate > 0.2)
+    {
+        lastUpdate = currTime;
+        fps = static_cast<unsigned int>(1.0 / dt);
+    }
 }
 
 void Engine::processEvents()
@@ -47,60 +48,47 @@ void Engine::processEvents()
         Window::close();
     if (Keyboard::isJustPressed(KEY_TAB))
         Mouse::setCursorLock(!Mouse::isCursorLocked());
+
+    player.processEvents();
 }
 
 void Engine::update()
 {
-    if (Mouse::isCursorLocked())
-    {
-        camera->yaw(Mouse::getDx() * 0.2f * dt);
-        camera->pitch(Mouse::getDy() * 0.1f * dt);
-
-        glm::vec3 pos, norm, ipos;
-        if (chunks->rayCast(camera->getPosition(), camera->getDirection(), &pos, &norm, &ipos))
-        {
-            if (Mouse::isJustClicked(MOUSE_BUTTON_LEFT))
-            {
-                glm::ivec3 voxelPos = ipos + norm;
-                chunks->setVoxel(voxelPos.x, voxelPos.y, voxelPos.z, 1);
-            }
-            if (Mouse::isJustClicked(MOUSE_BUTTON_RIGHT))
-                chunks->setVoxel((int)ipos.x, (int)ipos.y, (int)ipos.z, 0);
-
-            chunksRenderer.drawVoxelNormal(ipos + 0.5f, norm);
-            chunksRenderer.drawVoxelBox(ipos + 0.5f);
-        }
-    }
-
-    static float speed = 30.0f;
-    {
-        if (Keyboard::isPressed(KEY_W))
-            camera->moveForward(dt * speed);
-        if (Keyboard::isPressed(KEY_S))
-            camera->moveBackward(dt * speed);
-        if (Keyboard::isPressed(KEY_D))
-            camera->moveRight(dt * speed);
-        if (Keyboard::isPressed(KEY_A))
-            camera->moveLeft(dt * speed);
-        if (Keyboard::isPressed(KEY_SPACE))
-            camera->moveUp(dt * speed);
-        if (Keyboard::isPressed(KEY_LEFT_SHIFT))
-            camera->moveDown(dt * speed);
-	}
+    Raycasting::rayCast(player.getCamera()->getPosition(), player.getCamera()->getDirection(), &chunks);
+    player.update(dt);
     
-    chunks->centeredAt(camera->getPosition().x, camera->getPosition().z);
-    chunks->update();
+    chunks.centeredAt(player.getCamera()->getPosition().x, player.getCamera()->getPosition().z);
+    chunks.update();
 }
 
 void Engine::render()
 {
     Window::clear();
 
-    // chunksRenderer.drawChunkBox();
-    chunksRenderer.drawWorldAxis();
+    glm::vec3 camPos = player.getCamera()->getPosition();
 
-    chunksRenderer.render(assets);
-    lineBatch->render(assets, camera->getProjViewMatrix());
+    std::ostringstream title;
+    title << "FPS: " << fps << '\n';
+    title << "Position: [" << camPos.x << ", " << camPos.y << ", " << camPos.z << "]\n";
+    title << "Look at: " << Blocks::getBlock(Raycasting::id).name;
+    title << "\nSelected: " << Blocks::getBlock(player.getSelected()).name;
+    
+    static Label lbl(&textBatch, title.str(), 3, 0);
+    lbl.setText(title.str());
+    lbl.render();
+
+    if (Raycasting::id)
+    {
+        chunksRenderer.drawVoxelNormal(Raycasting::iend + 0.5f, Raycasting::norm);
+        chunksRenderer.drawVoxelBox(Raycasting::iend + 0.5f);
+    }
+
+    // chunksRenderer.drawChunkBox();
+    //chunksRenderer.drawWorldAxis();
+    chunksRenderer.render(assets, atlas);
+
+    lineBatch.render(assets, player.getCamera()->getProjViewMatrix());
+    textBatch.render(assets);
 
     Window::swapBuffers();
 }

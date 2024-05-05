@@ -24,7 +24,7 @@ namespace colors
     const Color TRANSPARENT{ 0, 0 };
 }
 
-class Image
+class Image final
 {
     uint8_t* data;
     uint32_t width, height, channels;
@@ -37,19 +37,19 @@ public:
     Image(Image&&) noexcept;
     ~Image();
 
-    bool isRGB() const { return channels == 3; }
+    bool isRGB()  const { return channels == 3; }
     bool isRGBA() const { return channels == 4; }
 
-    uint32_t getWidth() const { return width; }
-    uint32_t getHeight() const { return height; }
-    uint32_t getChannels() const { return channels; }
+    uint32_t getWidth()      const { return width; }
+    uint32_t getHeight()     const { return height; }
+    uint32_t getChannels()   const { return channels; }
     const uint8_t* getData() const { return data; }
 
     /* If isRGB return true alpha will be ignored */
-    void setPixel(uint32_t x, uint32_t y, const Color color);
-
+    void setPixel(uint32_t x, uint32_t y, Color color);
     void blit(uint32_t x, uint32_t y, const Image& img);
-
+    
+    Image subImage(uint32_t x, uint32_t y, uint32_t w, uint32_t h) const;
     Texture makeTexture() const; 
 
     Image copy() const;

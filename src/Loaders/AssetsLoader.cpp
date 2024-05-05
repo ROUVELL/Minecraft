@@ -22,34 +22,32 @@ AssetsLoader::~AssetsLoader()
         shader.second.del();
 }
 
-bool AssetsLoader::textureExists(const std::string& name)
+bool AssetsLoader::textureExists(const std::string& name) const
 {
     return fs::exists(TEXTURES_FOLDER + name + ".png");
 }
 
-bool AssetsLoader::shaderExists(const std::string& name)
+bool AssetsLoader::shaderExists(const std::string& name) const
 {
     return fs::exists(SHADERS_FOLDER + name + ".glslv") && fs::exists(SHADERS_FOLDER + name + ".glslf");
 }
 
-Texture AssetsLoader::loadTexture(const std::string& name)
+Texture AssetsLoader::loadTexture(const std::string& name) const
 {
     if (textureExists(name))
         return Texture(TEXTURES_FOLDER + name + ".png");
 
-    std::cout << "Texture not exits: '" << name << "'! An empty texture was returned!\n";
+    std::cout << "Texture doesn`t exist: '" << name << "'! An empty texture was returned!\n";
 
     return Texture();
 }
 
-Shader AssetsLoader::loadShader(const std::string& name)
+Shader AssetsLoader::loadShader(const std::string& name) const
 {
     if (shaderExists(name))
-    {
         return Shader(SHADERS_FOLDER + name);
-    }
     
-    std::cout << "Shader not exits: '" << name << "'! An empty shader was returned!\n";
+    std::cout << "Shader doesn`t exist: '" << name << "'! An empty shader was returned!\n";
 
     return Shader();
 }
@@ -62,7 +60,7 @@ Texture* AssetsLoader::loadAndSaveTexture(const std::string& name)
         return &textures[name];
     }
 
-    std::cout << "Texture not exits: '" << name << "'!\n";
+    std::cout << "Texture doesn`t exist: '" << name << "'!\n";
 
     return nullptr;
 }
@@ -74,7 +72,7 @@ Shader* AssetsLoader::loadAndSaveShader(const std::string& name)
         return &shaders[name];
     }
     
-    std::cout << "Shader not exits: '" << name << "'!\n";
+    std::cout << "Shader doesn`t exist: '" << name << "'!\n";
 
     return nullptr;
 }

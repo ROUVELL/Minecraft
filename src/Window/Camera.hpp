@@ -14,7 +14,7 @@ class Camera
 	void updateProjMatrix();
 
 public:
-	Camera(const glm::vec3& pos, float fov);
+	Camera(glm::vec3 pos, float fov);
 
 	void yaw(float angle);
 	void pitch(float angle);
@@ -26,15 +26,15 @@ public:
 	void moveUp(float distance);
 	void moveDown(float distance);
 
-	glm::vec3 getPosition() const { return position; }
+	glm::vec3 getPosition()  const { return position; }
 	glm::vec3 getDirection() const { return direction; }
-	float getFOV() const { return fov; }
+	float getFOV()           const { return fov; }
 
-	void setPosition(const glm::vec3 newPosition) { position = newPosition; }
-	void setPosition(float x, float y, float z) { position = {x, y, z}; }
+	void setPosition(const glm::vec3 newPosition)   { position = newPosition; }
+	void setPosition(float x, float y, float z)     { position = {x, y, z}; }
 	void setDirection(const glm::vec3 newDirection) { direction = glm::normalize(newDirection); }
-	void setDirection(float x, float y, float z) { direction = glm::normalize(glm::vec3(x, y, z)); }
-	void setFOV(float newFov) { fov = newFov; updateProjMatrix(); }
+	void setDirection(float x, float y, float z)    { direction = glm::normalize(glm::vec3(x, y, z)); }
+	void setFOV(float newFov)                       { fov = glm::radians(newFov); updateProjMatrix(); }
 
 	glm::mat4 getProjViewMatrix() const;
 };

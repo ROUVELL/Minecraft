@@ -16,6 +16,8 @@ void windowSizeCallback(GLFWwindow*, int width, int height);
 GLFWwindow* Window::window = nullptr;
 int Window::width = 1920;
 int Window::height = 1020;
+float Window::pixelWidth = 2.0f / Window::width;
+float Window::pixelHeight = 2.0f / Window::height;
 
 bool Window::isOpen()
 {
@@ -43,6 +45,8 @@ void Window::onSizeChanged(int width, int height)
 
 	Window::width = width;
 	Window::height = height;
+	Window::pixelWidth = 2.0 / width;
+	Window::pixelHeight = 2.0 / height;
 }
 
 void Window::initialize(bool fullscreen, bool vsinc)
@@ -60,11 +64,7 @@ void Window::initialize(bool fullscreen, bool vsinc)
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
 	if (fullscreen)
-	{
-		width = 1920;
-		height = 1080;
 		window = glfwCreateWindow(width, height, "Voxel Engine", glfwGetPrimaryMonitor(), nullptr);
-	}
 	else
     	window = glfwCreateWindow(width, height, "Voxel Engine", nullptr, nullptr);
 

@@ -1,0 +1,28 @@
+[
+    {
+        "name": "grass",
+        "texture": ["grass", "grass_side", "dirt"]
+    },
+    {
+        "name": "dirt"
+    },
+    {
+        "name": "planks"
+    },
+    {
+        "name": "stone"
+    },
+    {
+        "name": "stone_bricks"
+    },
+    {
+        "name": "smooth_stone"
+    },
+    {
+        "name": "wood",
+        "texture": ["wood", "wood_side", "wood"]
+    },
+    {
+        "name": "leaves"
+    }
+]

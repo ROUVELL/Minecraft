@@ -1,22 +1,30 @@
 #pragma once
 
-#include <memory>
-
+#include "World/Chunk.hpp"
 #include "World/ChunksRenderer.hpp"
+#include "World/Entity/Player.hpp"
 #include "Loaders/AssetsLoader.hpp"
+#include "Graphics/LineBatch.hpp"
+#include "Graphics/TextBatch.hpp"
+
+#include "Voxels/Atlas.hpp"
+#include <type_traits>
 
 class Engine final
 {
-    std::shared_ptr<Camera> camera;
-    std::shared_ptr<Chunks> chunks;
-    std::shared_ptr<LineBatch> lineBatch;
-    
-    AssetsLoader assets;
-
+    Chunks chunks;
+    Player player;
     ChunksRenderer chunksRenderer;
 
-    double dt;
-    uint64_t frame;
+    LineBatch lineBatch;
+    TextBatch textBatch;
+    
+    AssetsLoader assets;
+    Atlas        atlas;
+
+    double       dt;
+    unsigned int fps;
+    uint64_t     frame;
 
     void updateDt();
     void processEvents();
@@ -25,10 +33,13 @@ class Engine final
 
 public:
     Engine();
-    ~Engine();
+    Engine(const Engine&) = delete;
+    Engine(Engine&&) noexcept = delete;
+    ~Engine() = default;
 
-    double getDt() const { return dt; }
-    uint64_t getFrame() const { return frame; }
+    double getDt() const        { return dt; }
+    uint64_t getFrame() const   { return frame; }
+    unsigned int getFps() const { return fps; }
 
     void run();
     void stop();

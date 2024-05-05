@@ -19,11 +19,11 @@ public:
 
     // TODO: I think it would be better with templates
 
-    bool textureExists(const std::string& name);
-    bool shaderExists(const std::string& name);
+    bool textureExists(const std::string& name) const;
+    bool shaderExists(const std::string& name) const;
 
-    Texture loadTexture(const std::string& name);
-    Shader loadShader(const std::string& name);
+    Texture loadTexture(const std::string& name) const;
+    Shader loadShader(const std::string& name) const;
 
     Texture* loadAndSaveTexture(const std::string& name);
     Shader* loadAndSaveShader(const std::string& name);
