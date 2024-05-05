@@ -1,34 +1,28 @@
 [
     {
         "name": "grass",
-        "uv": [[32, 0], [64, 0], [96, 0]]
+        "texture": ["grass", "grass_side", "dirt"]
     },
     {
-        "name": "dirt",
-        "uv": [96, 0]
+        "name": "dirt"
     },
     {
-        "name": "planks",
-        "uv": [192, 0]
+        "name": "planks"
     },
     {
-        "name": "stone",
-        "uv": [0, 32]
+        "name": "stone"
     },
     {
-        "name": "stone_bricks",
-        "uv": [128, 0]
+        "name": "stone_bricks"
     },
     {
-        "name": "smooth_stone",
-        "uv": [160, 0]
+        "name": "smooth_stone"
     },
     {
         "name": "wood",
-        "uv": [[256, 0], [224, 0], [256, 0]]
+        "texture": ["wood", "wood_side", "wood"]
     },
     {
-        "name": "leaves",
-        "uv": [288, 0]
+        "name": "leaves"
     }
 ]
