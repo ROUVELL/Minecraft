@@ -21,7 +21,7 @@ public:
     ~Player() = default;
 
     const Camera* getCamera() const { return &camera; }
-    voxel_t getSelected() const { return selected; }
+    voxel_t getSelected() const     { return selected; }
 
     void processEvents();
     void update(double dt);

@@ -1,7 +1,5 @@
 #include "ChunkMeshBuilder.hpp"
 
-#include <iostream>
-
 #include "../Graphics/Mesh.hpp"
 #include "../Voxels/Blocks.hpp"
 #include "Chunk.hpp"

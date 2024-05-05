@@ -19,7 +19,7 @@ void Player::processEvents()
 
 void Player::update(double dt)
 {
-    for (uint key = KEY_1; key <= KEY_9; ++key)
+    for (uint key = KEY_1; key < KEY_9; ++key)
     {
         if (Keyboard::isJustPressed(key))
             selected = key - KEY_0;

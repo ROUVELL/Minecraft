@@ -3,15 +3,15 @@
 #include "../Window/Window.hpp"
 #include "../Loaders/AssetsLoader.hpp"
 
-constexpr int FONT_IMG_WIDTH = 256;
-constexpr int FONT_IMG_HEIGHT = 256;
+inline constexpr int FONT_IMG_WIDTH = 256;
+inline constexpr int FONT_IMG_HEIGHT = 256;
 
-constexpr int SYMBOL_WIDTH = 16;
-constexpr int SYMBOL_HEIGHT = 16;
-constexpr int SYMBOLS_IN_ROW = 16;
+inline constexpr int SYMBOL_WIDTH = 16;
+inline constexpr int SYMBOL_HEIGHT = 16;
+inline constexpr int SYMBOLS_IN_ROW = 16;
 
-constexpr float SYMBOL_UV_WIDTH = (float)SYMBOL_WIDTH / (float)FONT_IMG_WIDTH;
-constexpr float SYMBOL_UV_HEIGHT = (float)SYMBOL_HEIGHT / (float)FONT_IMG_HEIGHT;
+inline constexpr float SYMBOL_UV_WIDTH = (float)SYMBOL_WIDTH / (float)FONT_IMG_WIDTH;
+inline constexpr float SYMBOL_UV_HEIGHT = (float)SYMBOL_HEIGHT / (float)FONT_IMG_HEIGHT;
 
 
 TextBatch::TextBatch()

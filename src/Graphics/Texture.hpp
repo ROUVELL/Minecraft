@@ -21,10 +21,10 @@ public:
 	void fromImage(const Image& image);
 
 	unsigned int getID() const { return ID; }
-	int getWidth() const { return width; }
-	int getHeight() const { return height; }
+	int getWidth()       const { return width; }
+	int getHeight()      const { return height; }
 
-	void bind();
-	void unbind();
+	void bind() const;
+	void unbind() const;
 	void del();
 };

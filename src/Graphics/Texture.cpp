@@ -79,12 +79,12 @@ void Texture::fromImage(const Image& image)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::bind()
+void Texture::bind() const
 {
 	glBindTexture(GL_TEXTURE_2D, ID);
 }
 
-void Texture::unbind()
+void Texture::unbind() const
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

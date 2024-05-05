@@ -78,7 +78,7 @@ void Chunk::onDelete()
 	if (n.front) n.front->setModified();
 }
 
-void Chunk::render()
+void Chunk::render() const
 {
 	mesh.render();
 }

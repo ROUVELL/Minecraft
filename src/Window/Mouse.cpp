@@ -1,6 +1,5 @@
 #include "Mouse.hpp"
 
-#include <cstring>
 #include <GLFW/glfw3.h>
 
 #include "Window.hpp"
@@ -8,8 +7,8 @@
 void mouseButtonCallback(GLFWwindow*, int button, int action, int);
 void cursorPositionCallback(GLFWwindow*, double xpos, double ypos);
 
-uint Mouse::buttons[8];
-uint Mouse::current = 0;
+unsigned int Mouse::buttons[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+unsigned int Mouse::current = 0;
 bool Mouse::locked = false;
 bool Mouse::started = false;
 float Mouse::dx = 0.0;
@@ -20,26 +19,8 @@ float Mouse::y = 0.0;
 
 void Mouse::initialize()
 {
-    memset(buttons, 0, 8 * sizeof(uint));
-
 	glfwSetMouseButtonCallback(Window::getInstance(), mouseButtonCallback);
 	glfwSetCursorPosCallback(Window::getInstance(), cursorPositionCallback);
-}
-
-void Mouse::update()
-{
-    dx = dy = 0.0;
-    ++current;
-}
-
-bool Mouse::isClicked(uint button)
-{
-	return buttons[button];
-}
-
-bool Mouse::isJustClicked(uint button)
-{
-	return buttons[button] == current;
 }
 
 void Mouse::setCursorLock(bool flag)
@@ -47,7 +28,6 @@ void Mouse::setCursorLock(bool flag)
     locked = flag;
     Window::setCursorVisible(!locked);
 }
-
 
 void mouseButtonCallback(GLFWwindow*, int button, int action, int)
 {
