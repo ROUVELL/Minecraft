@@ -19,7 +19,7 @@ void Player::processEvents()
 
 void Player::update(double dt)
 {
-    for (uint key = KEY_1; key <= KEY_9; ++key)
+    for (uint key = KEY_1; key < KEY_9; ++key)
     {
         if (Keyboard::isJustPressed(key))
             selected = key - KEY_0;
@@ -48,10 +48,10 @@ void Player::update(double dt)
     float distance = speed * dt;
     if (Keyboard::isPressed(KEY_LEFT_SHIFT)) distance *= 3.0;
 
-    if (Keyboard::isPressed(KEY_W)) camera.moveForward(distance);
-    if (Keyboard::isPressed(KEY_S)) camera.moveBackward(distance);
-    if (Keyboard::isPressed(KEY_D)) camera.moveRight(distance);
-    if (Keyboard::isPressed(KEY_A)) camera.moveLeft(distance);
-    if (Keyboard::isPressed(KEY_SPACE))      camera.moveUp(distance);
+    if (Keyboard::isPressed(KEY_W))         camera.moveForward(distance);
+    if (Keyboard::isPressed(KEY_S))         camera.moveBackward(distance);
+    if (Keyboard::isPressed(KEY_D))         camera.moveRight(distance);
+    if (Keyboard::isPressed(KEY_A))         camera.moveLeft(distance);
+    if (Keyboard::isPressed(KEY_SPACE))     camera.moveUp(distance);
     if (Keyboard::isPressed(KEY_LEFT_CTRL)) camera.moveDown(distance);
 }

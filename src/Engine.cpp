@@ -4,6 +4,7 @@
 #include <string>
 
 #include "World/Raycasting.hpp"
+#include "Voxels/Blocks.hpp"
 #include "Window/Window.hpp"
 #include "Window/Keyboard.hpp"
 #include "Window/Mouse.hpp"
@@ -11,17 +12,15 @@
 
 
 Engine::Engine()
-    : player(&chunks, glm::vec3(0.0, 60.0, 0.0)),
+    : player(&chunks, glm::vec3(0.0, 10.0, 0.0)),
     chunksRenderer(&chunks, &lineBatch, player.getCamera()),
     dt(16.6),
     fps(60),
     frame(0)
 {
     Mouse::setCursorLock(true);
-}
-
-Engine::~Engine()
-{
+    
+    Blocks::initialize(atlas);
 }
 
 void Engine::updateDt()
@@ -65,15 +64,13 @@ void Engine::render()
 {
     Window::clear();
 
-    // chunksRenderer.drawChunkBox();
-    chunksRenderer.drawWorldAxis();
-    chunksRenderer.render(assets);
-
     glm::vec3 camPos = player.getCamera()->getPosition();
 
     std::ostringstream title;
     title << "FPS: " << fps << '\n';
-    title << "Position: [" << camPos.x << ", " << camPos.y << ", " << camPos.z << "]";
+    title << "Position: [" << camPos.x << ", " << camPos.y << ", " << camPos.z << "]\n";
+    title << "Look at: " << Blocks::getBlock(Raycasting::id).name;
+    title << "\nSelected: " << Blocks::getBlock(player.getSelected()).name;
     
     static Label lbl(&textBatch, title.str(), 3, 0);
     lbl.setText(title.str());
@@ -84,6 +81,10 @@ void Engine::render()
         chunksRenderer.drawVoxelNormal(Raycasting::iend + 0.5f, Raycasting::norm);
         chunksRenderer.drawVoxelBox(Raycasting::iend + 0.5f);
     }
+
+    // chunksRenderer.drawChunkBox();
+    //chunksRenderer.drawWorldAxis();
+    chunksRenderer.render(assets, atlas);
 
     lineBatch.render(assets, player.getCamera()->getProjViewMatrix());
     textBatch.render(assets);

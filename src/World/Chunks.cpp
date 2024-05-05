@@ -160,14 +160,14 @@ void Chunks::update()
 	}
 }
 
-void Chunks::render(Shader& shader)
+void Chunks::render(Shader& shader) const
 {
 	for (int cx = 1; cx < WORLD_SIZE - 1; ++cx)
 		for (int cz = 1; cz < WORLD_SIZE - 1; ++cz)
-			{
-				Chunk* chunk = chunks[cx + cz * WORLD_SIZE];
-				shader.uniformMat4("model", chunk->getModelMatrix());
-				chunk->render();
-			}
+		{
+			const Chunk* const chunk = chunks[cx + cz * WORLD_SIZE];
+			shader.uniformMat4("model", chunk->getModelMatrix());
+			chunk->render();
+		}
 }
 

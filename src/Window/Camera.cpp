@@ -1,6 +1,5 @@
 
 #include "Camera.hpp"
-#include <glm/trigonometric.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/rotate_vector.hpp>
@@ -10,7 +9,7 @@
 
 const glm::vec3 UP_VEC = glm::vec3(0.0, 1.0, 0.0);
 
-Camera::Camera(const glm::vec3& pos, float fov)
+Camera::Camera(glm::vec3 pos, float fov)
 	: position( pos ),
 	  direction( 0.0, 0.0, -1.0 ),
 	  right( 1, 0, 0 ),

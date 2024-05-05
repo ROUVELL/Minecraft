@@ -43,11 +43,11 @@ Image::~Image()
     del();
 }
 
-void Image::setPixel(uint32_t x, uint32_t y, const Color color)
+void Image::setPixel(uint32_t x, uint32_t y, Color color)
 {
     uint32_t start = x * channels + y * width * channels;
 
-    data[start++] = color. r;
+    data[start++] = color.r;
     data[start++] = color.g;
     data[start++] = color.b;
 
@@ -79,7 +79,7 @@ void Image::blit(uint32_t x, uint32_t y, const Image& img)
 }
 
 
-Image Image::subImage(uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+Image Image::subImage(uint32_t x, uint32_t y, uint32_t w, uint32_t h) const
 {
     Image sub(w, h, channels);
 

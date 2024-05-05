@@ -7,6 +7,9 @@
 #include "Graphics/LineBatch.hpp"
 #include "Graphics/TextBatch.hpp"
 
+#include "Voxels/Atlas.hpp"
+#include <type_traits>
+
 class Engine final
 {
     Chunks chunks;
@@ -17,10 +20,11 @@ class Engine final
     TextBatch textBatch;
     
     AssetsLoader assets;
+    Atlas        atlas;
 
-    double dt;
+    double       dt;
     unsigned int fps;
-    uint64_t frame;
+    uint64_t     frame;
 
     void updateDt();
     void processEvents();
@@ -29,10 +33,12 @@ class Engine final
 
 public:
     Engine();
-    ~Engine();
+    Engine(const Engine&) = delete;
+    Engine(Engine&&) noexcept = delete;
+    ~Engine() = default;
 
-    double getDt() const { return dt; }
-    uint64_t getFrame() const { return frame; }
+    double getDt() const        { return dt; }
+    uint64_t getFrame() const   { return frame; }
     unsigned int getFps() const { return fps; }
 
     void run();

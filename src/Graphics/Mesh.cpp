@@ -52,14 +52,14 @@ void Mesh::build(const MeshData& data)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void Mesh::render()
+void Mesh::render() const
 {
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
-void Mesh::render(unsigned int mode)
+void Mesh::render(unsigned int mode) const
 {
 	glBindVertexArray(VAO);
 	glDrawElements(mode, count, GL_UNSIGNED_INT, 0);
@@ -71,4 +71,5 @@ void Mesh::del()
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &IBO);
 	glDeleteVertexArrays(1, &VAO);
+	VAO = VBO = IBO = count = 0;
 }

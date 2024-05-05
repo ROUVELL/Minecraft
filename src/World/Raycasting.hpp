@@ -6,7 +6,7 @@
 
 class Chunks;
 
-class Raycasting
+class Raycasting final
 {
     Raycasting() = default;
     ~Raycasting() = default;

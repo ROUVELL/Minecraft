@@ -9,29 +9,14 @@
 void keyCallback(GLFWwindow*, int key, int, int action, int);
 
 
-uint Keyboard::keys[1024];
-uint Keyboard::current = 0;
+unsigned int Keyboard::keys[1024];
+unsigned int Keyboard::current = 0;
 
 void Keyboard::initialize()
 {
-    memset(keys, 0, 1024 * sizeof(uint));
+    memset(keys, 0, 1024 * sizeof(unsigned int));
 
  	glfwSetKeyCallback(Window::getInstance(), keyCallback);   
-}
-
-void Keyboard::update()
-{
-    ++current;
-}
-
-bool Keyboard::isPressed(uint keycode)
-{
-	return keys[keycode];
-}
-
-bool Keyboard::isJustPressed(uint keycode)
-{
-	return keys[keycode] == current;
 }
 
 void keyCallback(GLFWwindow*, int key, int, int action, int)

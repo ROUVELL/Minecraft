@@ -6,11 +6,12 @@ class Chunks;
 class LineBatch;
 class Camera;
 class AssetsLoader;
+class Atlas;
 
-class ChunksRenderer
+class ChunksRenderer final
 {
-    Chunks* const chunks;
-    LineBatch* const lineBatch;
+    Chunks* const       chunks;
+    LineBatch* const    lineBatch;
     const Camera* const camera;
 
 public:
@@ -21,8 +22,8 @@ public:
 
     void drawWorldAxis();
     void drawChunkBox();
-    void drawVoxelBox(const glm::vec3& center);
-    void drawVoxelNormal(const glm::vec3& center, const glm::vec3& normal);
+    void drawVoxelBox(glm::vec3 center);
+    void drawVoxelNormal(glm::vec3 center, glm::vec3 normal);
     
-    void render(AssetsLoader& assets);
+    void render(AssetsLoader& assets, const Atlas& atlas) const;
 };
