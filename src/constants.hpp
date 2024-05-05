@@ -1,5 +1,7 @@
 #pragma once
 
+inline constexpr int MAX_BLOCKS_COUNT =            256;
+
 inline constexpr int CHUNK_SIDE =                  16;
 inline constexpr int CHUNK_HEIGHT =                64;
 inline constexpr int CHUNK_AREA =                  CHUNK_SIDE * CHUNK_SIDE;

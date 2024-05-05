@@ -1,6 +1,34 @@
 [
     {
-        "id": 1,
-        "name": "grass"
+        "name": "grass",
+        "uv": [[32, 0], [64, 0], [96, 0]]
+    },
+    {
+        "name": "dirt",
+        "uv": [96, 0]
+    },
+    {
+        "name": "planks",
+        "uv": [192, 0]
+    },
+    {
+        "name": "stone",
+        "uv": [0, 32]
+    },
+    {
+        "name": "stone_bricks",
+        "uv": [128, 0]
+    },
+    {
+        "name": "smooth_stone",
+        "uv": [160, 0]
+    },
+    {
+        "name": "wood",
+        "uv": [[256, 0], [224, 0], [256, 0]]
+    },
+    {
+        "name": "leaves",
+        "uv": [288, 0]
     }
 ]

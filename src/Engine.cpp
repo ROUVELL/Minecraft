@@ -4,6 +4,7 @@
 #include <string>
 
 #include "World/Raycasting.hpp"
+#include "Voxels/Blocks.hpp"
 #include "Window/Window.hpp"
 #include "Window/Keyboard.hpp"
 #include "Window/Mouse.hpp"
@@ -73,7 +74,9 @@ void Engine::render()
 
     std::ostringstream title;
     title << "FPS: " << fps << '\n';
-    title << "Position: [" << camPos.x << ", " << camPos.y << ", " << camPos.z << "]";
+    title << "Position: [" << camPos.x << ", " << camPos.y << ", " << camPos.z << "]\n";
+    title << "Look at: " << Blocks::getBlock(Raycasting::id).name;
+    title << "\nSelected: " << Blocks::getBlock(player.getSelected()).name;
     
     static Label lbl(&textBatch, title.str(), 3, 0);
     lbl.setText(title.str());
