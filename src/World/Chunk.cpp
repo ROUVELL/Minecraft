@@ -10,7 +10,8 @@ Chunk::Chunk(int cx, int cz, const Chunks* chunks)
 	mesh({ 3, 2, 1 }),
 	position{cx, cz},
 	rebuildNeighboars(false),
-	modified(false)
+	modified(false),
+	wasModified(false)
 {
 	memset(voxels, 0, CHUNK_VOLUME);
 	model = glm::translate(glm::mat4(1.0f), glm::vec3(position.x * CHUNK_SIDE, 0, position.z * CHUNK_SIDE));
@@ -22,7 +23,9 @@ void Chunk::setVoxel(int x, int y, int z, voxel_t id)
 		return;
 
 	voxels[x + y * CHUNK_AREA + z * CHUNK_SIDE] = id;
+	
 	setModified();
+	wasModified = true;
 
 	ChunkNeighboars n = getNeighboars();
 

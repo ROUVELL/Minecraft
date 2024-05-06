@@ -17,6 +17,9 @@ Chunks::~Chunks()
 	for (int index = 0; index < WORLD_AREA; ++index)
 		if (Chunk* chunk = chunks[index])
 		{
+			if (chunk->isWasModified())
+				worldFiles.save(*chunk);
+
 			chunk->onDelete();
 			delete chunk;
 			chunks[index] = nullptr;
@@ -102,6 +105,9 @@ void Chunks::shift(int dx, int dz)
 
 		if (newCx < 0 || WORLD_SIZE <= newCx || newCz < 0 || WORLD_SIZE <= newCz)
 		{
+			if (chunk->isWasModified())
+				worldFiles.save(*chunk);
+			
 			chunk->onDelete();
 			delete chunk;
 			chunks[index] = nullptr;
@@ -116,8 +122,15 @@ void Chunks::shift(int dx, int dz)
 	for (int index = 0; index < WORLD_AREA; ++index)
 		if (chunksTemp[index] == nullptr)
 		{
-			chunksTemp[index] = new Chunk(index % WORLD_SIZE + ox, index / WORLD_SIZE + oz, this);
-			chunksTemp[index]->generate(flatGenerator);
+			const int cx = index % WORLD_SIZE + ox;
+			const int cz = index / WORLD_SIZE + oz;
+
+			Chunk* const newChunk = chunksTemp[index] = new Chunk(cx, cz, this);
+			
+			if (worldFiles.exists(cx, cz) && worldFiles.load(*newChunk))
+				newChunk->setModified();
+			else
+				newChunk->generate(flatGenerator);
 		}
 	
 	std::swap(chunks, chunksTemp);

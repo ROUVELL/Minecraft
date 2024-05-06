@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "WorldFiles.hpp"
 #include "../constants.hpp"
 #include "../typedefs.hpp"
 
@@ -27,6 +28,8 @@ class Chunks final
 	std::vector<Chunk*> chunks;
 	std::vector<Chunk*> chunksTemp;
 	int ox, oz;
+
+	WorldFiles worldFiles;
 
 	ChunkNeighboars neighboarsLocal(int cx, int cz) const { return { getChunkLocal(cx + 1, cz), getChunkLocal(cx - 1, cz), getChunkLocal(cx, cz + 1), getChunkLocal(cx, cz - 1)};}
 	Chunk* getChunkLocal(int cx, int cz) const            { return isValidPosition(cx, cz) ? chunks[cx + cz * WORLD_SIZE] : nullptr; }

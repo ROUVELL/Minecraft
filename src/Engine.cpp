@@ -83,7 +83,7 @@ void Engine::render()
     }
 
     // chunksRenderer.drawChunkBox();
-    //chunksRenderer.drawWorldAxis();
+    chunksRenderer.drawWorldAxis();
     chunksRenderer.render(assets, atlas);
 
     lineBatch.render(assets, player.getCamera()->getProjViewMatrix());
