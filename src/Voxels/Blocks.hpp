@@ -34,8 +34,8 @@ class Blocks final
 public:
     static void initialize(const Atlas& atlas);
 
-    static bool exists(voxel_t id);
-    static uint64_t count();
+    static bool exists(voxel_id id) { return id < count(); }
+    static uint64_t count()         { return blocks.size(); }
 
-    static const Block& getBlock(voxel_t id);
+    static const Block& getBlock(voxel_id id) { return blocks[id]; }
 };

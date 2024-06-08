@@ -7,14 +7,13 @@
 
 Chunks::Chunks()
 	: chunks(WORLD_AREA, nullptr),
-	chunksTemp(WORLD_AREA, nullptr),
-	ox(0), oz(0)
+	chunksTemp(WORLD_AREA, nullptr)
 {
 }
 
 Chunks::~Chunks()
 {
-	for (int index = 0; index < WORLD_AREA; ++index)
+	for (unsigned index = 0; index < WORLD_AREA; ++index)
 		if (Chunk* chunk = chunks[index])
 		{
 			if (chunk->isWasModified())
@@ -69,7 +68,7 @@ uint8_t Chunks::getVoxel(int wx, int wy, int wz) const
 	return chunk->at(lx, wy, lz);
 }
 
-void Chunks::setVoxel(int wx, int wy, int wz, voxel_t id)
+void Chunks::setVoxel(int wx, int wy, int wz, voxel_id id)
 {
 	if (wy < 0 || wy >= CHUNK_HEIGHT)
 		return;
@@ -154,7 +153,7 @@ void Chunks::update()
 {
 	if (Chunk* nearest = getNearestModified())
 	{
-		ChunkNeighboars n = nearest->getNeighboars();
+		chunk_neighboars n = nearest->getNeighboars();
 
 		if (n.right && n.left && n.front && n.back)
 		{

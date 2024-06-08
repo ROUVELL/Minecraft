@@ -1,6 +1,7 @@
 #include "Texture.hpp"
 
 #include <GL/glew.h>
+#include <GL/glext.h>
 
 #include "../vendors/stb/stb_image.hpp"
 #include "Image.hpp"
@@ -49,6 +50,7 @@ void Texture::fromFile(const std::string& path)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 5);
+
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, 0);

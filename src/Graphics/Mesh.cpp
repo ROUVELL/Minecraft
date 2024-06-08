@@ -19,7 +19,7 @@ Mesh::Mesh(const std::vector<unsigned int>& attrs)
 	unsigned int offset = 0;
 	for (unsigned int i = 0; i < attrs.size(); ++i)
 	{
-		glVertexAttribPointer(i, attrs[i], GL_FLOAT, GL_FALSE, vertexSize, (GLvoid*)offset);
+		glVertexAttribPointer(i, attrs[i], GL_FLOAT, GL_FALSE, vertexSize, (GLvoid*)(unsigned long)offset);
 		glEnableVertexAttribArray(i);
 		offset += attrs[i] * sizeof(GLfloat);
 	}

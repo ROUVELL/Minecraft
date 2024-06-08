@@ -1,6 +1,6 @@
 #pragma once
 
-#include "World/Chunk.hpp"
+#include "World/Chunks.hpp"
 #include "World/ChunksRenderer.hpp"
 #include "World/Entity/Player.hpp"
 #include "Loaders/AssetsLoader.hpp"
@@ -8,7 +8,7 @@
 #include "Graphics/TextBatch.hpp"
 
 #include "Voxels/Atlas.hpp"
-#include <type_traits>
+
 
 class Engine final
 {
@@ -22,9 +22,8 @@ class Engine final
     AssetsLoader assets;
     Atlas        atlas;
 
-    double       dt;
-    unsigned int fps;
-    uint64_t     frame;
+    f64 dt = 0.16;
+    u32 fps = 60;
 
     void updateDt();
     void processEvents();
@@ -37,9 +36,8 @@ public:
     Engine(Engine&&) noexcept = delete;
     ~Engine() = default;
 
-    double getDt() const        { return dt; }
-    uint64_t getFrame() const   { return frame; }
-    unsigned int getFps() const { return fps; }
+    f64 getDt() const    { return dt; }
+    u32 getFps() const   { return fps; }
 
     void run();
     void stop();

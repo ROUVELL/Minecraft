@@ -115,8 +115,8 @@ void Window::clear()
 
 void Window::pollEvents()
 {
-	Keyboard::update();
-	Mouse::update();
+	Keyboard::_update();
+	Mouse::_update();
 	glfwPollEvents();
 }
 

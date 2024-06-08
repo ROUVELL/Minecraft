@@ -9,7 +9,7 @@
 #include "../Voxels/Atlas.hpp"
 
 
-const glm::vec4 BLOCK_BOX_COLOR = glm::vec4(1.0, 1.0, 1.0, 0.6);
+inline constexpr const glm::vec4 BLOCK_BOX_COLOR = glm::vec4(1.0f, 1.0f, 1.0f, 0.6f);
 
 
 ChunksRenderer::ChunksRenderer(Chunks* const chunks, LineBatch* const lineBatch, const Camera* const camera)

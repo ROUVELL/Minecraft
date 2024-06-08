@@ -1,5 +1,6 @@
 #pragma once
 
+
 inline constexpr int floordiv(int a, int b) noexcept
 {
 	return (a < 0) ? (a / b) - 1 : (a / b);

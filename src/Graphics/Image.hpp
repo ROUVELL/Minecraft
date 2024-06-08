@@ -1,17 +1,18 @@
 #pragma once
 
-#include <cstdint>
 #include <string>
+
+#include "../typedefs.hpp"
 
 class Texture;
 
 struct Color
 {
-    uint8_t r, g, b, a;
+    u8 r, g, b, a;
 
     Color() : r(255), g(255), b(255), a(255) { }
-    Color(uint8_t scalar, uint8_t a = 255) : r(scalar), g(scalar), b(scalar), a(a) { }
-    Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) : r(r), g(g), b(b), a(a) { }
+    Color(u8 scalar, u8 a = 255) : r(scalar), g(scalar), b(scalar), a(a) { }
+    Color(u8 r, u8 g, u8 b, u8 a = 255) : r(r), g(g), b(b), a(a) { }
 };
 
 namespace colors
@@ -26,13 +27,13 @@ namespace colors
 
 class Image final
 {
-    uint8_t* data;
-    uint32_t width, height, channels;
+    u8* data;
+    u32 width, height, channels;
 
 public:
     Image();
     Image(const std::string& path);
-    Image(uint32_t width, uint32_t height, uint32_t channels = 4);
+    Image(u32 width, u32 height, u32 channels = 4);
     Image(const Image&);
     Image(Image&&) noexcept;
     ~Image();
@@ -40,16 +41,16 @@ public:
     bool isRGB()  const { return channels == 3; }
     bool isRGBA() const { return channels == 4; }
 
-    uint32_t getWidth()      const { return width; }
-    uint32_t getHeight()     const { return height; }
-    uint32_t getChannels()   const { return channels; }
-    const uint8_t* getData() const { return data; }
+    u32 getWidth()      const { return width; }
+    u32 getHeight()     const { return height; }
+    u32 getChannels()   const { return channels; }
+    const u8* getData() const { return data; }
 
     /* If isRGB return true alpha will be ignored */
-    void setPixel(uint32_t x, uint32_t y, Color color);
-    void blit(uint32_t x, uint32_t y, const Image& img);
+    void setPixel(u32 x, u32 y, Color color);
+    void blit(u32 x, u32 y, const Image& img);
     
-    Image subImage(uint32_t x, uint32_t y, uint32_t w, uint32_t h) const;
+    Image subImage(u32 x, u32 y, u32 w, u32 h) const;
     Texture makeTexture() const; 
 
     Image copy() const;

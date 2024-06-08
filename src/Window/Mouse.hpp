@@ -23,7 +23,7 @@ class Mouse final
 	
 public:
     static void initialize();
-    static void update() { dx = dy = 0; ++current; }
+    static void _update() { dx = dy = 0; ++current; }
 
 	static bool isCursorLocked()                   { return locked; }
 	static bool isClicked(unsigned int button)     { return buttons[button]; }

@@ -4,6 +4,7 @@
 #include "../Voxels/Blocks.hpp"
 #include "Chunk.hpp"
 
+
 void buildChunkMesh(const Chunk& chunk, MeshData* meshData)
 {
 	unsigned int index = 0;
@@ -19,14 +20,16 @@ void buildChunkMesh(const Chunk& chunk, MeshData* meshData)
 		index += 4;
 	};
 
+	chunk_neighboars n = chunk.getNeighboars();
 
-	ChunkNeighboars n = chunk.getNeighboars();
+	if (!(n.front && n.back && n.left && n.right))
+		return;
 
 	for (int y = 0; y < CHUNK_HEIGHT; ++y)
 		for (int z = 0; z < CHUNK_SIDE; ++z)
 			for (int x = 0; x < CHUNK_SIDE; ++x)
 			{
-				voxel_t id = chunk.at(x, y, z);
+				voxel_id id = chunk.at(x, y, z);
 
 				if (!id)
 					continue;

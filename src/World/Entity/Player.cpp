@@ -1,20 +1,18 @@
 #include "Player.hpp"
 
 #include "../Chunks.hpp"
+#include "../../Window/Window.hpp"
 #include "../../Window/Keyboard.hpp"
 #include "../../Window/Mouse.hpp"
 
 #include "../Raycasting.hpp"
 
 
-Player::Player(Chunks* const chunks, glm::vec3 pos)
-    : camera(pos, 70.0f), chunks(chunks), selected(1), speed(30.0)
+Player::Player(Chunks* const chunks, glm::vec3 pos, float speed)
+    : camera(pos, 70.0f, Window::getAspect()),
+    chunks(chunks),
+    speed(speed)
 {
-}
-
-void Player::processEvents()
-{
-
 }
 
 void Player::update(double dt)

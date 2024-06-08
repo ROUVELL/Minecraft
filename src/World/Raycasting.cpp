@@ -1,15 +1,15 @@
 #include "Raycasting.hpp"
 
 #include <limits>
-#include "cmath"
+#include <math.h>
 
 #include "Chunks.hpp"
-#include "../math.hpp"
+
 
 glm::vec3 Raycasting::end{ 0.0f};
 glm::vec3 Raycasting::norm{ 0.0f};
 glm::vec3 Raycasting::iend{ 0.0f};
-voxel_t Raycasting::id = 0;
+voxel_id Raycasting::id = 0;
 
 
 bool Raycasting::rayCast(glm::vec3 start, glm::vec3 dir, const Chunks* const chunks)
@@ -38,9 +38,9 @@ bool Raycasting::rayCast(glm::vec3 start, glm::vec3 dir, const Chunks* const chu
 
 	const float infinity = std::numeric_limits<float>::infinity();
 
-	const float txDelta = (dx == 0.0f) ? infinity : abs(1.0f / dx);
-	const float tyDelta = (dy == 0.0f) ? infinity : abs(1.0f / dy);
-	const float tzDelta = (dz == 0.0f) ? infinity : abs(1.0f / dz);
+	const float txDelta = (dx == 0.0f) ? infinity : std::abs(1.0f / dx);
+	const float tyDelta = (dy == 0.0f) ? infinity : std::abs(1.0f / dy);
+	const float tzDelta = (dz == 0.0f) ? infinity : std::abs(1.0f / dz);
 
 	const float xdist = (stepx > 0) ? (ix + 1 - px) : (px - ix);
 	const float ydist = (stepy > 0) ? (iy + 1 - py) : (py - iy);

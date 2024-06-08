@@ -14,20 +14,20 @@ Image::Image()
 
 Image::Image(const std::string& path)
 {
-    data = stbi_load(path.c_str(), (int32_t*)&width, (int32_t*)&height, (int32_t*)&channels, 0);
+    data = stbi_load(path.c_str(), (i32*)&width, (i32*)&height, (i32*)&channels, 0);
 }
 
-Image::Image(uint32_t width, uint32_t height, uint32_t channels)
+Image::Image(u32 width, u32 height, u32 channels)
     : width(width), height(height), channels(channels)
 {
-    data = new uint8_t[width * height * channels];
+    data = new u8[width * height * channels];
     memset(data, 255, width * height * channels);
 }
 
 Image::Image(const Image& other)
     : width(other.width), height(other.height), channels(other.channels)
 {
-    data = new uint8_t[width * height * channels];
+    data = new u8[width * height * channels];
     memcpy(data, other.data, width * height * channels);
 }
 
@@ -43,9 +43,9 @@ Image::~Image()
     del();
 }
 
-void Image::setPixel(uint32_t x, uint32_t y, Color color)
+void Image::setPixel(u32 x, u32 y, Color color)
 {
-    uint32_t start = x * channels + y * width * channels;
+    u32 start = x * channels + y * width * channels;
 
     data[start++] = color.r;
     data[start++] = color.g;
@@ -55,7 +55,7 @@ void Image::setPixel(uint32_t x, uint32_t y, Color color)
         data[start] = color.a;
 }
 
-void Image::blit(uint32_t x, uint32_t y, const Image& img)
+void Image::blit(u32 x, u32 y, const Image& img)
 {
     if (x >= width || y >= height)
         return;
@@ -63,11 +63,11 @@ void Image::blit(uint32_t x, uint32_t y, const Image& img)
     if (isRGBA() && img.isRGB())
         return;
 
-    for (uint32_t localX = 0; localX < min(width - x, img.width); ++localX)
-        for (uint32_t localY = 0; localY < min(height - y, img.height); ++localY)
+    for (u32 localX = 0; localX < min(width - x, img.width); ++localX)
+        for (u32 localY = 0; localY < min(height - y, img.height); ++localY)
             {
-                uint32_t srcIndex = localX * img.getChannels() + localY * img.getWidth() * img.getChannels();
-                uint32_t dstIndex = (x + localX) * channels + (y + localY) * width * channels;
+                u32 srcIndex = localX * img.getChannels() + localY * img.getWidth() * img.getChannels();
+                u32 dstIndex = (x + localX) * channels + (y + localY) * width * channels;
                 
                 data[dstIndex] = img.data[srcIndex];
                 data[dstIndex + 1] = img.data[srcIndex + 1];
@@ -79,15 +79,15 @@ void Image::blit(uint32_t x, uint32_t y, const Image& img)
 }
 
 
-Image Image::subImage(uint32_t x, uint32_t y, uint32_t w, uint32_t h) const
+Image Image::subImage(u32 x, u32 y, u32 w, u32 h) const
 {
     Image sub(w, h, channels);
 
-    for (uint32_t localX = 0; localX < min(w, width - x); ++localX)
-        for (uint32_t localY = 0; localY < min( h, height - y); ++localY)
+    for (u32 localX = 0; localX < min(w, width - x); ++localX)
+        for (u32 localY = 0; localY < min( h, height - y); ++localY)
         {
-            uint32_t srcIndex = (localX + x) * channels + (localY + y) * width * channels;
-            uint32_t dstIndex = localX * channels + localY * w * channels;
+            u32 srcIndex = (localX + x) * channels + (localY + y) * width * channels;
+            u32 dstIndex = localX * channels + localY * w * channels;
             
             sub.data[dstIndex] = data[srcIndex];
             sub.data[dstIndex + 1] = data[srcIndex + 1];

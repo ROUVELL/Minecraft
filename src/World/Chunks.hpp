@@ -15,7 +15,7 @@ inline bool isValidPosition(int cx, int cz) noexcept
 class Chunk;
 class Shader;
 
-struct ChunkNeighboars
+struct chunk_neighboars
 {
 	Chunk* right;
 	Chunk* left;
@@ -27,12 +27,13 @@ class Chunks final
 {
 	std::vector<Chunk*> chunks;
 	std::vector<Chunk*> chunksTemp;
-	int ox, oz;
+	int ox = 0;
+	int oz = 0;
 
 	WorldFiles worldFiles;
 
-	ChunkNeighboars neighboarsLocal(int cx, int cz) const { return { getChunkLocal(cx + 1, cz), getChunkLocal(cx - 1, cz), getChunkLocal(cx, cz + 1), getChunkLocal(cx, cz - 1)};}
-	Chunk* getChunkLocal(int cx, int cz) const            { return isValidPosition(cx, cz) ? chunks[cx + cz * WORLD_SIZE] : nullptr; }
+	chunk_neighboars neighboarsLocal(int cx, int cz) const { return { getChunkLocal(cx + 1, cz), getChunkLocal(cx - 1, cz), getChunkLocal(cx, cz + 1), getChunkLocal(cx, cz - 1)};}
+	Chunk* getChunkLocal(int cx, int cz) const             { return isValidPosition(cx, cz) ? chunks[cx + cz * WORLD_SIZE] : nullptr; }
 	Chunk* getNearestModified() const;
 
 public:
@@ -41,11 +42,11 @@ public:
 	Chunks(Chunks&&) noexcept = delete;
 	~Chunks();
 
-	ChunkNeighboars neighboars(int cx, int cz) const { return { getChunk(cx + 1, cz), getChunk(cx - 1, cz), getChunk(cx, cz + 1), getChunk(cx, cz - 1) }; }
-	Chunk* getChunk(int cx, int cz) const            { return getChunkLocal(cx - ox, cz - oz); }
-	voxel_t getVoxel(int x, int y, int z) const;
+	chunk_neighboars neighboars(int cx, int cz) const { return { getChunk(cx + 1, cz), getChunk(cx - 1, cz), getChunk(cx, cz + 1), getChunk(cx, cz - 1) }; }
+	Chunk* getChunk(int cx, int cz) const             { return getChunkLocal(cx - ox, cz - oz); }
+	voxel_id getVoxel(int x, int y, int z) const;
 
-	void setVoxel(int x, int y, int z, voxel_t id);
+	void setVoxel(int x, int y, int z, voxel_id id);
 
 	void shift(int dx, int dz);
 	void centeredAt(int wx, int wz);
