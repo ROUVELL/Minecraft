@@ -55,7 +55,7 @@ void ChunksRenderer::render(AssetsLoader& assets, const Atlas& atlas) const
     shader->use();
     shader->uniformMat4("projview", camera->getProjViewMatrix());
 
-    atlas.getTexture().bind();
+    atlas.getTexture().bindUnit();
 
     chunks->render(*shader);
 }

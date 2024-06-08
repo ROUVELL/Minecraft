@@ -1,19 +1,27 @@
 #include "Texture.hpp"
 
+#include <math.h>
+
 #include <GL/glew.h>
-#include <GL/glext.h>
 
 #include "../vendors/stb/stb_image.hpp"
 #include "Image.hpp"
 
-inline constexpr GLenum int2enum(uint32_t channels) noexcept
+
+inline constexpr GLenum externalFormat(uint32_t channels) noexcept
 {
-	return (channels == 4) ? GL_RGBA : (channels == 3) ? GL_RGB : GL_RED;
+	return (channels == 4) ? GL_RGBA : GL_RGB;
 }
 
-Texture::Texture()
-	: ID{ 0 }, width{ 0 }, height{ 0 }
+inline constexpr GLenum internalFormat(unsigned channels) noexcept
 {
+	return (channels == 4) ? GL_RGBA8 : GL_RGB8;
+}
+
+
+Texture::Texture()
+{
+	glCreateTextures(GL_TEXTURE_2D, 1, &ID);
 }
 
 Texture::Texture(const std::string& path)
@@ -28,71 +36,40 @@ Texture::Texture(const Image& image)
 	fromImage(image);
 }
 
-Texture::Texture(Texture&& other) noexcept
-	: ID(other.ID), width(other.width), height(other.height)
-{
-}
-
 void Texture::fromFile(const std::string& path)
 {
-	if (ID != 0)
-		del();
-
-	int channels;
+	int width, height, channels;
 	unsigned char* bytes = stbi_load(path.c_str(), &width, &height, &channels, 0);
 
-	glGenTextures(1, &ID);
-	glBindTexture(GL_TEXTURE_2D, ID);
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, int2enum(channels), GL_UNSIGNED_BYTE, bytes);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 5);
-
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
+	fromBytes(width, height, channels, bytes);
 
 	stbi_image_free(bytes);
 }
 
 void Texture::fromImage(const Image& image)
 {
-	if (ID != 0)
-		del();
-
-	width = image.getWidth();
-	height = image.getHeight();
-
-	glGenTextures(1, &ID);
-	glBindTexture(GL_TEXTURE_2D, ID);
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, int2enum(image.getChannels()), GL_UNSIGNED_BYTE, image.getData());
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 5);
-
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
+	fromBytes(image.getWidth(), image.getHeight(), image.getChannels(), image.getData());
 }
 
-void Texture::bind() const
+void Texture::fromBytes(int width, int height, int channels, const unsigned char* const bytes)
 {
-	glBindTexture(GL_TEXTURE_2D, ID);
+	glTextureStorage2D(ID, 1 + std::floor(std::log2(std::max(width, height))), internalFormat(channels), width, height);
+	glTextureSubImage2D(ID, 0, 0, 0, width, height, externalFormat(channels), GL_UNSIGNED_BYTE, bytes);
+
+	glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTextureParameteri(ID, GL_TEXTURE_MAX_LEVEL, 5);
+
+	glGenerateTextureMipmap(ID);
 }
 
-void Texture::unbind() const
+void Texture::bindUnit(unsigned location) const
 {
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTextureUnit(location, ID);
 }
 
 void Texture::del()
 {
 	glDeleteTextures(1, &ID);
-	ID = width = height = 0;
+	ID = 0;
 }

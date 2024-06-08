@@ -67,7 +67,7 @@ void TextBatch::text(const std::string& text, int x, int y, float r, float g, fl
 void TextBatch::render(AssetsLoader& assets)
 {
     assets.getShader("text")->use();
-    assets.getTexture("fonts/font")->bind();
+    assets.getTexture("fonts/font")->bindUnit();
 
     mesh.build(meshData);
     mesh.render();

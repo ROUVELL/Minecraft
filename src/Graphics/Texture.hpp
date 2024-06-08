@@ -2,29 +2,27 @@
 
 #include <string>
 
+
 class Image;
 
 class Texture final
 {
-	unsigned int ID;
-	int width, height;
+	unsigned int ID = 0;
 
 public:
 	Texture();
 	Texture(const std::string& path);
 	Texture(const Image& image);
-	Texture(const Texture&) = delete;  // TODO: Probably need to implement a full copy of the texture (with a new ID of course)
-	Texture(Texture&&) noexcept;
+	Texture(const Texture&) = default;
+	Texture(Texture&&) noexcept = default;
 	~Texture() = default;
+
+	unsigned int getID() const { return ID; }
 
 	void fromFile(const std::string& path);
 	void fromImage(const Image& image);
+	void fromBytes(int width, int height, int channels, const unsigned char* const bytes);
 
-	unsigned int getID() const { return ID; }
-	int getWidth()       const { return width; }
-	int getHeight()      const { return height; }
-
-	void bind() const;
-	void unbind() const;
+	void bindUnit(unsigned location = 0) const;
 	void del();
 };
