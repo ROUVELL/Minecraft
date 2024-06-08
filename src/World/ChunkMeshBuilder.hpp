@@ -1,6 +1,6 @@
 #pragma once
 
 class Chunk;
-struct MeshData;
+struct mesh_data;
 
-void buildChunkMesh(const Chunk& chunk, MeshData* meshData);
+void buildChunkMesh(const Chunk& chunk, mesh_data* meshData);

@@ -5,7 +5,7 @@
 #include "Chunk.hpp"
 
 
-void buildChunkMesh(const Chunk& chunk, MeshData* meshData)
+void buildChunkMesh(const Chunk& chunk, mesh_data* meshData)
 {
 	unsigned int index = 0;
 

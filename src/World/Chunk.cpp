@@ -59,7 +59,7 @@ void Chunk::generate(Generator generator)
 
 void Chunk::buildMesh()
 {
-	MeshData meshData;
+	mesh_data meshData;
 
 	buildChunkMesh(*this, &meshData);
 

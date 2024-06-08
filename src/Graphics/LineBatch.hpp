@@ -16,7 +16,7 @@ class AssetsLoader;
 class LineBatch final
 {
     Mesh mesh;
-    MeshData meshData;
+    mesh_data meshData;
     
 public:
     LineBatch();

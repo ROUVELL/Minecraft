@@ -9,7 +9,7 @@ class AssetsLoader;
 class TextBatch final
 {
     Mesh mesh;
-    MeshData meshData;
+    mesh_data meshData;
 
     unsigned int index;
 
