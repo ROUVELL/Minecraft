@@ -51,7 +51,6 @@ void checkShaderError(GLuint shader, char type)
 
 
 Shader::Shader()
-	: ID{ 0 }
 {
 }
 
@@ -95,11 +94,6 @@ Shader::Shader(const std::string& vPath, const std::string& fPath)
 
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
-}
-
-Shader::Shader(Shader&& other) noexcept
-	: ID(other.ID)
-{
 }
 
 unsigned int Shader::findUniformLoc(const std::string& name) const
