@@ -3,6 +3,7 @@
 #include "../Window/Window.hpp"
 #include "../Loaders/AssetsLoader.hpp"
 
+
 inline constexpr int FONT_IMG_WIDTH = 256;
 inline constexpr int FONT_IMG_HEIGHT = 256;
 
@@ -15,14 +16,22 @@ inline constexpr float SYMBOL_UV_HEIGHT = (float)SYMBOL_HEIGHT / (float)FONT_IMG
 
 
 TextBatch::TextBatch()
-    : mesh({ 2, 2, 4 }),  // x, y,   u, v,   r, g, b, a
-    index(0)
 {
+    VAO.setAttrData(0, 2, 0);
+    VAO.setAttrData(1, 2, 2 * sizeof(float));
+    VAO.setAttrData(2, 4, 4 * sizeof(float));
+
+    VBO.create(nullptr, TEXT_BATCH_CAPICITY * sizeof(char_vertex_t), buffer_usage::DYNAMIC_DRAW);
+
+    VAO.bindVBO(VBO.getID(), 8 * sizeof(float));
+
 }
 
 TextBatch::~TextBatch()
 {
-    mesh.del();
+    VAO.del();
+    VBO.del();
+    count = 0;
 }
 
 void TextBatch::text(const std::string& text, int x, int y, float r, float g, float b, float a)
@@ -52,13 +61,18 @@ void TextBatch::text(const std::string& text, int x, int y, float r, float g, fl
         float u = (float)(c % SYMBOLS_IN_ROW) / SYMBOL_WIDTH;
         float v = (float)(c / SYMBOLS_IN_ROW) / SYMBOL_HEIGHT;
 
-        meshData.vertices.insert(meshData.vertices.end(), { sx, sy, u, v, r, g, b, a });
-        meshData.vertices.insert(meshData.vertices.end(), { sx + w, sy, u + SYMBOL_UV_WIDTH, v, r, g, b, a });
-        meshData.vertices.insert(meshData.vertices.end(), { sx + w, sy - h, u + SYMBOL_UV_WIDTH, v + SYMBOL_UV_HEIGHT, r, g, b, a });
-        meshData.vertices.insert(meshData.vertices.end(), { sx, sy - h, u, v + SYMBOL_UV_HEIGHT, r, g, b, a });
+        indices[count++] = index;
+        indices[count++] = index + 1;
+        indices[count++] = index + 2;
+        indices[count++] = index;
+        indices[count++] = index + 2;
+        indices[count++] = index + 3;
 
-        meshData.indices.insert(meshData.indices.end(), { index, index + 1, index + 2, index, index + 2, index + 3 });
-        index += 4;
+        vertices[index++] = { sx, sy, u, v, r, g, b, a };
+        vertices[index++] = { sx + w, sy, u + SYMBOL_UV_WIDTH, v, r, g, b, a };
+        vertices[index++] = { sx + w, sy - h, u + SYMBOL_UV_WIDTH, v + SYMBOL_UV_HEIGHT, r, g, b, a };
+        vertices[index++] = { sx, sy - h, u, v + SYMBOL_UV_HEIGHT, r, g, b, a };
+
 
         sx += w / 2.0;
     }
@@ -69,10 +83,12 @@ void TextBatch::render(AssetsLoader& assets)
     assets.getShader("text")->use();
     assets.getTexture("fonts/font")->bindUnit();
 
-    mesh.build(meshData);
-    mesh.render();
+    VBO.write(vertices, index * sizeof(char_vertex_t));
 
-    meshData.vertices.clear();
-    meshData.indices.clear();
+    VAO.bind();
+    VAO.drawElements(count, indices);
+    VAO.unbind();
+
+    count = 0;
     index = 0;
 }
