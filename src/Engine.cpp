@@ -72,8 +72,8 @@ void Engine::render()
 
     if (Raycasting::id)
     {
-        chunksRenderer.drawVoxelNormal(Raycasting::iend + 0.5f, Raycasting::norm);
-        chunksRenderer.drawVoxelBox(Raycasting::iend + 0.5f);
+        chunksRenderer.drawVoxelNormal(Raycasting::iend, Raycasting::norm);
+        chunksRenderer.drawVoxelBox(Raycasting::iend);
     }
 
     // chunksRenderer.drawChunkBox();

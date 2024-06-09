@@ -39,14 +39,15 @@ void ChunksRenderer::drawChunkBox()
     lineBatch->box(glm::vec3(x, CHUNK_HEIGHT * 0.5f, z), glm::vec3(CHUNK_SIDE, CHUNK_HEIGHT, CHUNK_SIDE) + 0.01f);
 }
 
-void ChunksRenderer::drawVoxelBox(glm::vec3 center)
+void ChunksRenderer::drawVoxelBox(glm::vec3 position)
 {
-    lineBatch->box(center, glm::vec3(1.01f), BLOCK_BOX_COLOR);
+    lineBatch->box(position - 0.01f, glm::vec3(1.02f), BLOCK_BOX_COLOR);
 }
 
-void ChunksRenderer::drawVoxelNormal(glm::vec3 center, glm::vec3 normal)
+void ChunksRenderer::drawVoxelNormal(glm::vec3 position, glm::vec3 normal)
 {
-    lineBatch->line(center, center + normal, BLACK);
+    position += 0.5f;
+    lineBatch->line(position, position + normal, BLACK);
 }
 
 void ChunksRenderer::render(AssetsLoader& assets, const Atlas& atlas) const
