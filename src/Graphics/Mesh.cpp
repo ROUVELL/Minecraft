@@ -10,43 +10,37 @@ Mesh::Mesh(const std::vector<unsigned int>& attrs)
 	// TODO: Rebuild method
 	// TODO: Allocate buffer memory here
 
-	glCreateVertexArrays(1, &VAO);
-	glCreateBuffers(1, &VBO);
-	glCreateBuffers(1, &EBO);
-
 	unsigned int offset = 0;
 	for (unsigned int i = 0; i < attrs.size(); ++i)
 	{
-		glVertexArrayAttribFormat(VAO, i, attrs[i], GL_FLOAT, GL_FALSE, offset);
-		glVertexArrayAttribBinding(VAO, i, 0);
-		glEnableVertexArrayAttrib(VAO, i);
+		VAO.setAttrData(i, attrs[i], offset);
 
 		offset += attrs[i] * sizeof(GLfloat);
 	}
 
-	glVertexArrayVertexBuffer(VAO, 0, VBO, 0, std::reduce(attrs.begin(), attrs.end()) * sizeof(GLfloat));
-	glVertexArrayElementBuffer(VAO, EBO);
+	VAO.bindVBO(VBO.getID(), std::reduce(attrs.begin(), attrs.end()) * sizeof(GLfloat));
+	VAO.bindEBO(EBO.getID());
 }
 
 void Mesh::build(const mesh_data& data)
 {
 	count = data.indices.size();
 
-	glNamedBufferData(VBO, data.vertices.size() * sizeof(GLfloat), data.vertices.data(), GL_DYNAMIC_DRAW);
-	glNamedBufferData(EBO, data.indices.size() * sizeof(GLuint), data.indices.data(), GL_DYNAMIC_DRAW);
+	VBO.create(data.vertices.data(), data.vertices.size() * sizeof(GLfloat), buffer_usage::DYNAMIC_DRAW);
+	EBO.create(data.indices.data(), data.indices.size() * sizeof(GLuint), buffer_usage::DYNAMIC_DRAW);
 }
 
 void Mesh::render(unsigned int mode) const
 {
-	glBindVertexArray(VAO);
-	glDrawElements(mode, count, GL_UNSIGNED_INT, NULL);
-	glBindVertexArray(0);
+	VAO.bind();
+	VAO.drawElements(count, nullptr, mode);
+	VAO.unbind();
 }
 
 void Mesh::del()
 {
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
-	glDeleteVertexArrays(1, &VAO);
-	VAO = VBO = EBO = count = 0;
+	VAO.del();
+	VBO.del();
+	EBO.del();
+	count = 0;
 }

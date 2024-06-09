@@ -2,6 +2,9 @@
 
 #include <vector>
 
+#include "../GL/Buffers/Buffer.hpp"
+#include "../GL/Buffers/Vao.hpp"
+
 
 struct mesh_data
 {
@@ -21,9 +24,9 @@ struct mesh_data
 
 class Mesh final
 {
-	unsigned VAO = 0;
-	unsigned VBO = 0;
-	unsigned EBO = 0;
+	Vao VAO;
+	Buffer VBO;
+	Buffer EBO;
 	unsigned count = 0;
 
 public:

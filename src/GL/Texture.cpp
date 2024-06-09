@@ -5,7 +5,7 @@
 #include <GL/glew.h>
 
 #include "../vendors/stb/stb_image.hpp"
-#include "Image.hpp"
+#include "../Graphics/Image.hpp"
 
 
 inline constexpr GLenum externalFormat(uint32_t channels) noexcept

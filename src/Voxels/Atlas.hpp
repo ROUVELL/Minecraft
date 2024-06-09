@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <string>
 
-#include "../Graphics/Texture.hpp"
+#include "../GL/Texture.hpp"
 
 struct UVRegion
 {

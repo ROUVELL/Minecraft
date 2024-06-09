@@ -4,7 +4,7 @@
 
 #include "../vendors/stb/stb_image.hpp"
 #include "../math.hpp"
-#include "Texture.hpp"
+#include "../GL/Texture.hpp"
 
 
 Image::Image()

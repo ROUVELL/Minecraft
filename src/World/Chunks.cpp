@@ -2,7 +2,7 @@
 
 #include "Chunk.hpp"
 #include "Generators.hpp"
-#include "../Graphics/Shader.hpp"
+#include "../GL/Shader.hpp"
 #include "../math.hpp"
 
 Chunks::Chunks()
