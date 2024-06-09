@@ -2,8 +2,8 @@
 
 #include <unordered_map>
 
-#include "../Graphics/Texture.hpp"
-#include "../Graphics/Shader.hpp"
+#include "../GL/Texture.hpp"
+#include "../GL/Shader.hpp"
 
 
 class AssetsLoader

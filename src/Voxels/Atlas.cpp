@@ -1,6 +1,5 @@
 #include "Atlas.hpp"
 
-#include <cstdint>
 #include <filesystem>
 
 #include "../Graphics/Image.hpp"

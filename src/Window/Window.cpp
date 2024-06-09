@@ -57,8 +57,8 @@ void Window::initialize(bool fullscreen, bool vsinc)
         return;
 	}
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
 	glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
@@ -115,8 +115,8 @@ void Window::clear()
 
 void Window::pollEvents()
 {
-	Keyboard::update();
-	Mouse::update();
+	Keyboard::_update();
+	Mouse::_update();
 	glfwPollEvents();
 }
 

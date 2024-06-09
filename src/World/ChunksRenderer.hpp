@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/fwd.hpp>
+#include <glm/ext/vector_float3.hpp>
 
 class Chunks;
 class LineBatch;
@@ -22,8 +22,8 @@ public:
 
     void drawWorldAxis();
     void drawChunkBox();
-    void drawVoxelBox(glm::vec3 center);
-    void drawVoxelNormal(glm::vec3 center, glm::vec3 normal);
+    void drawVoxelBox(glm::vec3 position);
+    void drawVoxelNormal(glm::vec3 position, glm::vec3 normal);
     
     void render(AssetsLoader& assets, const Atlas& atlas) const;
 };

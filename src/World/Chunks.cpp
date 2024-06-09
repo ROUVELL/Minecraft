@@ -2,21 +2,23 @@
 
 #include "Chunk.hpp"
 #include "Generators.hpp"
-#include "../Graphics/Shader.hpp"
+#include "../GL/Shader.hpp"
 #include "../math.hpp"
 
 Chunks::Chunks()
 	: chunks(WORLD_AREA, nullptr),
-	chunksTemp(WORLD_AREA, nullptr),
-	ox(0), oz(0)
+	chunksTemp(WORLD_AREA, nullptr)
 {
 }
 
 Chunks::~Chunks()
 {
-	for (int index = 0; index < WORLD_AREA; ++index)
+	for (unsigned index = 0; index < WORLD_AREA; ++index)
 		if (Chunk* chunk = chunks[index])
 		{
+			if (chunk->isWasModified())
+				worldFiles.save(*chunk);
+
 			chunk->onDelete();
 			delete chunk;
 			chunks[index] = nullptr;
@@ -66,7 +68,7 @@ uint8_t Chunks::getVoxel(int wx, int wy, int wz) const
 	return chunk->at(lx, wy, lz);
 }
 
-void Chunks::setVoxel(int wx, int wy, int wz, voxel_t id)
+void Chunks::setVoxel(int wx, int wy, int wz, voxel_id id)
 {
 	if (wy < 0 || wy >= CHUNK_HEIGHT)
 		return;
@@ -102,6 +104,9 @@ void Chunks::shift(int dx, int dz)
 
 		if (newCx < 0 || WORLD_SIZE <= newCx || newCz < 0 || WORLD_SIZE <= newCz)
 		{
+			if (chunk->isWasModified())
+				worldFiles.save(*chunk);
+			
 			chunk->onDelete();
 			delete chunk;
 			chunks[index] = nullptr;
@@ -116,8 +121,15 @@ void Chunks::shift(int dx, int dz)
 	for (int index = 0; index < WORLD_AREA; ++index)
 		if (chunksTemp[index] == nullptr)
 		{
-			chunksTemp[index] = new Chunk(index % WORLD_SIZE + ox, index / WORLD_SIZE + oz, this);
-			chunksTemp[index]->generate(flatGenerator);
+			const int cx = index % WORLD_SIZE + ox;
+			const int cz = index / WORLD_SIZE + oz;
+
+			Chunk* const newChunk = chunksTemp[index] = new Chunk(cx, cz, this);
+			
+			if (worldFiles.exists(cx, cz) && worldFiles.load(*newChunk))
+				newChunk->setModified();
+			else
+				newChunk->generate(flatGenerator);
 		}
 	
 	std::swap(chunks, chunksTemp);
@@ -141,7 +153,7 @@ void Chunks::update()
 {
 	if (Chunk* nearest = getNearestModified())
 	{
-		ChunkNeighboars n = nearest->getNeighboars();
+		chunk_neighboars n = nearest->getNeighboars();
 
 		if (n.right && n.left && n.front && n.back)
 		{

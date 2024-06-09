@@ -41,7 +41,7 @@ class Keyboard final
 
 public:
 	static void initialize();
-    static void update() { ++current; }
+    static void _update() { ++current; }
 
     static bool isPressed(unsigned int keycode)     { return keys[keycode]; }
 	static bool isJustPressed(unsigned int keycode) { return keys[keycode] == current; }

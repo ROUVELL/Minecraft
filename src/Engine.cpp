@@ -1,7 +1,6 @@
 #include "Engine.hpp"
 
 #include <sstream>
-#include <string>
 
 #include "World/Raycasting.hpp"
 #include "Voxels/Blocks.hpp"
@@ -13,10 +12,7 @@
 
 Engine::Engine()
     : player(&chunks, glm::vec3(0.0, 10.0, 0.0)),
-    chunksRenderer(&chunks, &lineBatch, player.getCamera()),
-    dt(16.6),
-    fps(60),
-    frame(0)
+    chunksRenderer(&chunks, &lineBatch, player.getCamera())
 {
     Mouse::setCursorLock(true);
     
@@ -35,7 +31,7 @@ void Engine::updateDt()
     if (currTime - lastUpdate > 0.2)
     {
         lastUpdate = currTime;
-        fps = static_cast<unsigned int>(1.0 / dt);
+        fps = static_cast<u32>(1.0 / dt);
     }
 }
 
@@ -47,8 +43,6 @@ void Engine::processEvents()
         Window::close();
     if (Keyboard::isJustPressed(KEY_TAB))
         Mouse::setCursorLock(!Mouse::isCursorLocked());
-
-    player.processEvents();
 }
 
 void Engine::update()
@@ -78,12 +72,12 @@ void Engine::render()
 
     if (Raycasting::id)
     {
-        chunksRenderer.drawVoxelNormal(Raycasting::iend + 0.5f, Raycasting::norm);
-        chunksRenderer.drawVoxelBox(Raycasting::iend + 0.5f);
+        chunksRenderer.drawVoxelNormal(Raycasting::iend, Raycasting::norm);
+        chunksRenderer.drawVoxelBox(Raycasting::iend);
     }
 
     // chunksRenderer.drawChunkBox();
-    //chunksRenderer.drawWorldAxis();
+    chunksRenderer.drawWorldAxis();
     chunksRenderer.render(assets, atlas);
 
     lineBatch.render(assets, player.getCamera()->getProjViewMatrix());
@@ -96,8 +90,6 @@ void Engine::run()
 {
     while (Window::isOpen())
     {
-        ++frame;
-
         updateDt();
         processEvents();
         update();

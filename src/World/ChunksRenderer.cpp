@@ -9,7 +9,7 @@
 #include "../Voxels/Atlas.hpp"
 
 
-const glm::vec4 BLOCK_BOX_COLOR = glm::vec4(1.0, 1.0, 1.0, 0.6);
+inline constexpr const glm::vec4 BLOCK_BOX_COLOR = glm::vec4(1.0f, 1.0f, 1.0f, 0.6f);
 
 
 ChunksRenderer::ChunksRenderer(Chunks* const chunks, LineBatch* const lineBatch, const Camera* const camera)
@@ -39,14 +39,15 @@ void ChunksRenderer::drawChunkBox()
     lineBatch->box(glm::vec3(x, CHUNK_HEIGHT * 0.5f, z), glm::vec3(CHUNK_SIDE, CHUNK_HEIGHT, CHUNK_SIDE) + 0.01f);
 }
 
-void ChunksRenderer::drawVoxelBox(glm::vec3 center)
+void ChunksRenderer::drawVoxelBox(glm::vec3 position)
 {
-    lineBatch->box(center, glm::vec3(1.01f), BLOCK_BOX_COLOR);
+    lineBatch->box(position - 0.01f, glm::vec3(1.02f), BLOCK_BOX_COLOR);
 }
 
-void ChunksRenderer::drawVoxelNormal(glm::vec3 center, glm::vec3 normal)
+void ChunksRenderer::drawVoxelNormal(glm::vec3 position, glm::vec3 normal)
 {
-    lineBatch->line(center, center + normal, BLACK);
+    position += 0.5f;
+    lineBatch->line(position, position + normal, BLACK);
 }
 
 void ChunksRenderer::render(AssetsLoader& assets, const Atlas& atlas) const
@@ -55,7 +56,7 @@ void ChunksRenderer::render(AssetsLoader& assets, const Atlas& atlas) const
     shader->use();
     shader->uniformMat4("projview", camera->getProjViewMatrix());
 
-    atlas.getTexture().bind();
+    atlas.getTexture().bindUnit();
 
     chunks->render(*shader);
 }

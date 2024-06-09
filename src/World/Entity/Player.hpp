@@ -10,19 +10,18 @@ class Player
     Camera camera;
     Chunks* const chunks;
 
-    voxel_t selected;
+    voxel_id selected = 1;
 
     float speed;
 
 public:
-    Player(Chunks* const chunks, glm::vec3 pos);
+    Player(Chunks* const chunks, glm::vec3 pos, float speed = 20.0f);
     Player(const Player&) = delete;
     Player(Player&&) noexcept = delete;
     ~Player() = default;
 
     const Camera* getCamera() const { return &camera; }
-    voxel_t getSelected() const     { return selected; }
+    voxel_id getSelected() const    { return selected; }
 
-    void processEvents();
     void update(double dt);
 };

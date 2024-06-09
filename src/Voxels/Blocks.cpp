@@ -12,7 +12,7 @@ std::array<Block, MAX_BLOCKS_COUNT> Blocks::blocks;
 
 void Blocks::addBlock(const nlohmann::json& data, const Atlas& atlas)
 {
-    static voxel_t id = 1;
+    static voxel_id id = 1;
 
     Block block;
     block.name = data["name"];
@@ -72,21 +72,6 @@ void Blocks::initialize(const Atlas& atlas)
             if (blockData.is_object())
                 addBlock(blockData, atlas);
     }
-}
-
-bool Blocks::exists(voxel_t id)
-{
-    return id < count();
-}
-
-uint64_t Blocks::count()
-{
-    return blocks.size();
-}
-
-const Block& Blocks::getBlock(voxel_t id)
-{
-    return blocks[id];
 }
 
 json loadJSON(const char* path)
