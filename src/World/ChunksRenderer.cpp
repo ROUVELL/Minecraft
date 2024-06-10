@@ -33,10 +33,10 @@ void ChunksRenderer::drawChunkBox()
     const int cx = floordiv(camera->getPosition().x, CHUNK_SIDE);
     const int cz = floordiv(camera->getPosition().z, CHUNK_SIDE);
 
-    const float x = cx * CHUNK_SIDE + (CHUNK_SIDE * 0.5f);
-    const float z = cz * CHUNK_SIDE + (CHUNK_SIDE * 0.5f);
+    const float x = cx * CHUNK_SIDE;
+    const float z = cz * CHUNK_SIDE;
 
-    lineBatch->box(glm::vec3(x, CHUNK_HEIGHT * 0.5f, z), glm::vec3(CHUNK_SIDE, CHUNK_HEIGHT, CHUNK_SIDE) + 0.01f);
+    lineBatch->box(glm::vec3(x, 0.0f, z) - 0.09f, glm::vec3(CHUNK_SIDE, CHUNK_HEIGHT, CHUNK_SIDE) + 0.01f);
 }
 
 void ChunksRenderer::drawVoxelBox(glm::vec3 position)

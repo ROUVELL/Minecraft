@@ -9,11 +9,17 @@
 
 Chunk::Chunk(int cx, int cz, const Chunks* chunks)
 	: chunks(chunks),
-	mesh({ 3, 2, 1 }),
 	position{cx, cz}
 {
 	memset(voxels, 0, CHUNK_VOLUME);
 	model = glm::translate(glm::mat4(1.0f), glm::vec3(position.x * CHUNK_SIDE, 0, position.z * CHUNK_SIDE));
+
+	VAO.setAttrData(0, 3, 0);
+	VAO.setAttrData(1, 2, 3 * sizeof(float));
+
+	VBO.create(nullptr, MAX_VISIBLE_FACES * 4 * sizeof(chunk_vertex_t), buffer_usage::DYNAMIC_DRAW);
+
+	VAO.bindVBO(VBO.getID(), sizeof(chunk_vertex_t));
 }
 
 void Chunk::setVoxel(int x, int y, int z, voxel_id id)
@@ -59,18 +65,20 @@ void Chunk::generate(Generator generator)
 
 void Chunk::buildMesh()
 {
-	mesh_data meshData;
+	u32 verticesCount = 0;
+	static chunk_vertex_t verts[MAX_VISIBLE_FACES * 4];
 
-	buildChunkMesh(*this, &meshData);
+	buildChunkMesh(*this, verts, indices, verticesCount, indicesCount);
 
-	mesh.build(meshData);
-	
+	VBO.write(verts, verticesCount * sizeof(chunk_vertex_t));
+
 	modified = false;
 }
 
 void Chunk::onDelete()
 {
-	mesh.del();
+	VAO.del();
+	VBO.del();
 
 	chunk_neighboars n = getNeighboars();
 
@@ -82,6 +90,8 @@ void Chunk::onDelete()
 
 void Chunk::render() const
 {
-	mesh.render();
+	VAO.bind();
+	VAO.drawElements(indicesCount, indices);
+	VAO.unbind();
 }
 
