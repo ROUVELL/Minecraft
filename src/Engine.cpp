@@ -11,7 +11,7 @@
 
 
 Engine::Engine()
-    : player(&chunks, glm::vec3(0.0, 10.0, 0.0)),
+    : player(&chunks, glm::vec3(8.5, 10.0, 8.5)),
     chunksRenderer(&chunks, &lineBatch, player.getCamera())
 {
     Mouse::setCursorLock(true);

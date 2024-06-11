@@ -17,3 +17,4 @@ inline constexpr const int HALF_WORLD_SIZE =             WORLD_SIZE / 2;
 inline constexpr const int WORLD_AREA =                  WORLD_SIZE * WORLD_SIZE;
 
 inline constexpr const int MAX_RAYCAST_DIST =            10;
+inline constexpr const int MESH_BUILDING_PER_FRAME =     8;

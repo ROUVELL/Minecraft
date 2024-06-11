@@ -151,23 +151,30 @@ void Chunks::centeredAt(int wx, int wz)
 
 void Chunks::update()
 {
-	if (Chunk* nearest = getNearestModified())
+	Chunk* nearest = nullptr;
+
+	for (int i = 0; i < MESH_BUILDING_PER_FRAME; ++i)
 	{
+		nearest = getNearestModified();
+
+		if (nearest == nullptr)
+			break;
+
 		chunk_neighboars n = nearest->getNeighboars();
 
-		if (n.right && n.left && n.front && n.back)
+		if (!(n.right && n.left && n.front && n.back))
+			break;
+
+		nearest->buildMesh();
+
+		if (nearest->needRebuildNeighboars())
 		{
-			nearest->buildMesh();
+			nearest->setNeedRebuildNeighboars(false);
 
-			if (nearest->needRebuildNeighboars())
-			{
-				nearest->setNeedRebuildNeighboars(false);
-
-				if (n.right->isModified()) n.right->buildMesh();
-				if (n.left ->isModified()) n.left->buildMesh();
-				if (n.front->isModified()) n.front->buildMesh();
-				if (n.back ->isModified()) n.back->buildMesh();
-			}
+			if (n.right->isModified()) n.right->buildMesh();
+			if (n.left ->isModified()) n.left->buildMesh();
+			if (n.front->isModified()) n.front->buildMesh();
+			if (n.back ->isModified()) n.back->buildMesh();
 		}
 	}
 }
