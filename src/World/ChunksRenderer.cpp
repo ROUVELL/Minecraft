@@ -30,8 +30,8 @@ void ChunksRenderer::drawWorldAxis()
 
 void ChunksRenderer::drawChunkBox()
 {
-    const int cx = floordiv(camera->getPosition().x, CHUNK_SIDE);
-    const int cz = floordiv(camera->getPosition().z, CHUNK_SIDE);
+    const int cx = floordiv<float>(camera->getPosition().x, CHUNK_SIDE);
+    const int cz = floordiv<float>(camera->getPosition().z, CHUNK_SIDE);
 
     const float x = cx * CHUNK_SIDE;
     const float z = cz * CHUNK_SIDE;
