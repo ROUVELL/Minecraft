@@ -37,7 +37,7 @@ Chunk* Chunks::getNearestModified() const
 
 			if (chunks[index]->isModified())
 			{
-				int dist = std::abs(cx - HALF_WORLD_SIZE) + std::abs(cz - HALF_WORLD_SIZE);
+				int dist = abs(cx - HALF_WORLD_SIZE) + abs(cz - HALF_WORLD_SIZE);
 				if (dist < minDist)
 				{
 					minDist = dist;
@@ -129,7 +129,7 @@ void Chunks::shift(int dx, int dz)
 			if (worldFiles.exists(cx, cz) && worldFiles.load(*newChunk))
 				newChunk->setModified();
 			else
-				newChunk->generate(flatGenerator);
+				newChunk->generate(flatGenerator<3, 1>);
 		}
 	
 	std::swap(chunks, chunksTemp);

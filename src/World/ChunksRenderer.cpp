@@ -1,6 +1,6 @@
 #include "ChunksRenderer.hpp"
 
-#include "Chunk.hpp"
+#include "Chunks.hpp"
 #include "../math.hpp"
 #include "../Window/Camera.hpp"
 #include "../Graphics/LineBatch.hpp"
