@@ -37,7 +37,7 @@ Chunk* Chunks::getNearestModified() const
 
 			if (chunks[index]->isModified())
 			{
-				int dist = std::abs(cx - HALF_WORLD_SIZE) + std::abs(cz - HALF_WORLD_SIZE);
+				int dist = abs(cx - HALF_WORLD_SIZE) + abs(cz - HALF_WORLD_SIZE);
 				if (dist < minDist)
 				{
 					minDist = dist;
@@ -129,7 +129,7 @@ void Chunks::shift(int dx, int dz)
 			if (worldFiles.exists(cx, cz) && worldFiles.load(*newChunk))
 				newChunk->setModified();
 			else
-				newChunk->generate(flatGenerator);
+				newChunk->generate(flatGenerator<3, 1>);
 		}
 	
 	std::swap(chunks, chunksTemp);
@@ -151,23 +151,30 @@ void Chunks::centeredAt(int wx, int wz)
 
 void Chunks::update()
 {
-	if (Chunk* nearest = getNearestModified())
+	Chunk* nearest = nullptr;
+
+	for (int i = 0; i < MESH_BUILDING_PER_FRAME; ++i)
 	{
+		nearest = getNearestModified();
+
+		if (nearest == nullptr)
+			break;
+
 		chunk_neighboars n = nearest->getNeighboars();
 
-		if (n.right && n.left && n.front && n.back)
+		if (!(n.right && n.left && n.front && n.back))
+			break;
+
+		nearest->buildMesh();
+
+		if (nearest->needRebuildNeighboars())
 		{
-			nearest->buildMesh();
+			nearest->setNeedRebuildNeighboars(false);
 
-			if (nearest->needRebuildNeighboars())
-			{
-				nearest->setNeedRebuildNeighboars(false);
-
-				if (n.right->isModified()) n.right->buildMesh();
-				if (n.left ->isModified()) n.left->buildMesh();
-				if (n.front->isModified()) n.front->buildMesh();
-				if (n.back ->isModified()) n.back->buildMesh();
-			}
+			if (n.right->isModified()) n.right->buildMesh();
+			if (n.left ->isModified()) n.left->buildMesh();
+			if (n.front->isModified()) n.front->buildMesh();
+			if (n.back ->isModified()) n.back->buildMesh();
 		}
 	}
 }

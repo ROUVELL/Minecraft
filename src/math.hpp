@@ -1,7 +1,7 @@
 #pragma once
 
-
-inline constexpr int floordiv(int a, int b) noexcept
+template<typename T>
+inline constexpr T floordiv(T a, T b) noexcept
 {
 	return (a < 0) ? (a / b) - 1 : (a / b);
 }
