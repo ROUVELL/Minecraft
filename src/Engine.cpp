@@ -11,7 +11,7 @@
 
 
 Engine::Engine()
-    : player(&chunks, glm::vec3(8.5, 10.0, 8.5)),
+    : player(&chunks, glm::vec3(8.5f, 10.0f, 8.5f), 5.0f),
     chunksRenderer(&chunks, &lineBatch, player.getCamera())
 {
     Mouse::setCursorLock(true);
@@ -63,6 +63,7 @@ void Engine::render()
     std::ostringstream title;
     title << "FPS: " << fps << '\n';
     title << "Position: [" << camPos.x << ", " << camPos.y << ", " << camPos.z << "]\n";
+    title << "Angle: [yaw: " << player.getCamera()->getYawAngle() << ", pitch: " << player.getCamera()->getPitchAgnle() << "]\n";
     title << "Look at: " << Blocks::getBlock(Raycasting::id).name;
     title << "\nSelected: " << Blocks::getBlock(player.getSelected()).name;
     

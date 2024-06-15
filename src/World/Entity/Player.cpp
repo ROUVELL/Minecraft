@@ -25,8 +25,7 @@ void Player::update(double dt)
 
     if (Mouse::isCursorLocked())
     {
-        camera.yaw(-Mouse::getDx() * 0.2f * dt);
-        camera.pitch(-Mouse::getDy() * 0.1f * dt);
+        camera.rotate(Mouse::getDx() * 0.2f * dt, -Mouse::getDy() * 0.1f * dt);
 
         if (Raycasting::id)
         {
