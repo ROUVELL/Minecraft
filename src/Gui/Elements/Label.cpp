@@ -11,5 +11,5 @@ Label::Label(const std::string& text, int x, int y)
 
 void Label::render(UIBatch& textBatch)
 {
-    textBatch.text(text, x, y, {r, g, b, a});
+    textBatch.text(text, x, y, color);
 }

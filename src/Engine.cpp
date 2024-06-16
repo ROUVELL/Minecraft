@@ -82,8 +82,8 @@ void Engine::render()
     // chunksRenderer.drawWorldAxis();
     chunksRenderer.render(assets, atlas);
 
-    uiBatch.line(960, 530, 960, 550, { .a = 0.6f });
-    uiBatch.line(950, 540, 970, 540, { .a = 0.6f });
+    uiBatch.line(960, 530, 960, 550, color_t{225, 150});
+    uiBatch.line(950, 540, 970, 540, color_t{255, 150});
 
     // player hitbox
     // lineBatch.box(player.getCamera()->getPosition() - glm::vec3{0.2f, 1.6f, 0.2f}, glm::vec3{0.4f, 1.7f, 0.4f}, {0.0f, 1.0f, 0.0f, 1.0f});

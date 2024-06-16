@@ -5,8 +5,8 @@
 
 enum class attr_type : u32
 {
-    FLOAT = 0x1406
-    // TODO: define other types
+    FLOAT = 0x1406,
+    UNSIGNED_INT = 0x1405
 };
 
 

@@ -27,9 +27,11 @@ void Vao::bindEBO(u32 ebo) noexcept
 
 void Vao::setAttrData(u8 index, u8 size, u32 offset, attr_type type, u32 binding) noexcept
 {
-    // FIXME: What about integer types ?
+    if (type == attr_type::FLOAT)
+        glVertexArrayAttribFormat(ID, index, size, (GLenum)type, GL_FALSE, offset);
+    else
+        glVertexArrayAttribIFormat(ID, index, size, (GLenum)type, offset);
 
-    glVertexArrayAttribFormat(ID, index, size, (GLenum)type, GL_FALSE, offset);
     glVertexArrayAttribBinding(ID, index, binding);
     glEnableVertexArrayAttrib(ID, index);
 }

@@ -20,6 +20,7 @@ using f64 =  double;
 using voxel_id = u8;
 using Generator = void (voxel_id*, int, int);
 
+
 struct uv_region_t
 {
     float u1 = 0.0f;
@@ -28,10 +29,25 @@ struct uv_region_t
     float v2 = 1.0f;
 };
 
-struct fcolor_t
+union color_t
 {
-    float r = 1.0f;
-    float g = 1.0f;
-    float b = 1.0f;
-    float a = 1.0f;
+    struct
+    {
+        u8 r, g, b, a;
+    };
+
+    u32 value;  // AABBGGRR
+
+    constexpr color_t(u8 scalar = 255, u8 alpha = 255) noexcept : r(scalar), g(scalar), b(scalar), a(alpha) { }
+    constexpr color_t(u8 r, u8 g, u8 b, u8 a = 255) noexcept : r(r), g(g), b(b), a(a) { }
 };
+
+namespace colors
+{
+    inline constexpr const color_t WHITE{255};
+    inline constexpr const color_t BLACK{ 0};
+    inline constexpr const color_t RED{ 255, 0, 0 };
+    inline constexpr const color_t GREEN{ 0, 255, 0 };
+    inline constexpr const color_t BLUE{ 0, 0, 255 };
+    inline constexpr const color_t TRANSPARENT{ 0, 0 };
+}

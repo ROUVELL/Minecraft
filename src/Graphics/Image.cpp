@@ -7,24 +7,19 @@
 #include "../GL/Texture.hpp"
 
 
-Image::Image()
-    : data(nullptr), width(0), height(0), channels(0)
-{
-}
-
-Image::Image(const std::string& path)
+Image::Image(const std::string& path) noexcept
 {
     data = stbi_load(path.c_str(), (i32*)&width, (i32*)&height, (i32*)&channels, 0);
 }
 
-Image::Image(u32 width, u32 height, u32 channels)
+Image::Image(u32 width, u32 height, u32 channels) noexcept
     : width(width), height(height), channels(channels)
 {
     data = new u8[width * height * channels];
     memset(data, 255, width * height * channels);
 }
 
-Image::Image(const Image& other)
+Image::Image(const Image& other) noexcept
     : width(other.width), height(other.height), channels(other.channels)
 {
     data = new u8[width * height * channels];
@@ -38,12 +33,12 @@ Image::Image(Image&& other) noexcept
     other.width = other.height = other.channels = 0;
 }
 
-Image::~Image()
+Image::~Image() noexcept
 {
     del();
 }
 
-void Image::setPixel(u32 x, u32 y, Color color)
+void Image::setPixel(u32 x, u32 y, color_t color) noexcept
 {
     u32 start = x * channels + y * width * channels;
 
@@ -55,7 +50,7 @@ void Image::setPixel(u32 x, u32 y, Color color)
         data[start] = color.a;
 }
 
-void Image::blit(u32 x, u32 y, const Image& img)
+void Image::blit(u32 x, u32 y, const Image& img) noexcept
 {
     if (x >= width || y >= height)
         return;
@@ -79,7 +74,7 @@ void Image::blit(u32 x, u32 y, const Image& img)
 }
 
 
-Image Image::subImage(u32 x, u32 y, u32 w, u32 h) const
+Image Image::subImage(u32 x, u32 y, u32 w, u32 h) const noexcept
 {
     Image sub(w, h, channels);
 
@@ -100,17 +95,17 @@ Image Image::subImage(u32 x, u32 y, u32 w, u32 h) const
     return sub;
 }
 
-Texture Image::makeTexture() const
+Texture Image::makeTexture() const noexcept
 {
     return Texture(*this);
 }
 
-Image Image::copy() const
+Image Image::copy() const noexcept
 {
     return Image(*this);
 }
 
-void Image::del()
+void Image::del() noexcept
 {
     stbi_image_free(data);
     data = nullptr;

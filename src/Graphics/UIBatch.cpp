@@ -22,7 +22,7 @@ UIBatch::UIBatch()
 {
     VAO.setAttrData(0, 2, 0);
     VAO.setAttrData(1, 2, 2 * sizeof(float));
-    VAO.setAttrData(2, 4, 4 * sizeof(float));
+    VAO.setAttrData(2, 1, 4 * sizeof(float), attr_type::UNSIGNED_INT);
 
     VBO.create(nullptr, (UI_BATCH_LINES_CAPICITY + UI_BATCH_SPRITES_CAPICITY * 4)* sizeof(ui_vertex_t), buffer_usage::STREAM_DRAW);
 
@@ -36,7 +36,7 @@ UIBatch::~UIBatch()
     VBO.del();
 }
 
-void UIBatch::sprite(int x, int y, int w, int h, uv_region_t uvregion, fcolor_t color)
+void UIBatch::sprite(int x, int y, int w, int h, uv_region_t uvregion, color_t color)
 {
     const float sx = (x * 2.0f) / Window::getWidth() - 1.0f;
     const float sy = 1.0f - (y * 2.0f) / Window::getHeight();
@@ -53,14 +53,14 @@ void UIBatch::sprite(int x, int y, int w, int h, uv_region_t uvregion, fcolor_t 
     spriteIndices.push_back(count + 2);
     spriteIndices.push_back(count + 3);
 
-    sprites.emplace_back( sx, sy, uvregion.u1, uvregion.v1, color );
-    sprites.emplace_back( sx + sw, sy, uvregion.u2, uvregion.v1, color );
-    sprites.emplace_back( sx + sw, sy - sh, uvregion.u2, uvregion.v2, color );
-    sprites.emplace_back( sx, sy - sh, uvregion.u1, uvregion.v2, color );
+    sprites.emplace_back( sx, sy, uvregion.u1, uvregion.v1, color.value );
+    sprites.emplace_back( sx + sw, sy, uvregion.u2, uvregion.v1, color.value);
+    sprites.emplace_back( sx + sw, sy - sh, uvregion.u2, uvregion.v2, color.value );
+    sprites.emplace_back( sx, sy - sh, uvregion.u1, uvregion.v2, color.value );
 }
 
 
-void UIBatch::text(const std::string& text, int x, int y, fcolor_t color)
+void UIBatch::text(const std::string& text, int x, int y, color_t color)
 {
     const int sx = x;
 
@@ -89,40 +89,40 @@ void UIBatch::text(const std::string& text, int x, int y, fcolor_t color)
     }
 }
 
-void UIBatch::frect(int x, int y, int w, int h, fcolor_t color)
+void UIBatch::frect(int x, int y, int w, int h, color_t color)
 {
     sprite(x, y, w, h, {-1.0f, -1.0f, -1.0f, -1.0f}, color);
 }
 
-void UIBatch::line(int x1, int y1, int x2, int y2, fcolor_t color)
+void UIBatch::line(int x1, int y1, int x2, int y2, color_t color)
 {
     const float lx1 = (x1 * 2.0f) / Window::getWidth() - 1.0f;
     const float ly1 = 1.0f - (y1 * 2.0f) / Window::getHeight();
     const float lx2 = (x2 * 2.0f) / Window::getWidth() - 1.0f;
     const float ly2 = 1.0f - (y2 * 2.0f) / Window::getHeight();
 
-    lines.emplace_back(lx1, ly1, -1.0, -1.0, color);
-    lines.emplace_back(lx2, ly2, -1.0f, 1.0f, color);
+    lines.emplace_back(lx1, ly1, -1.0f, -1.0f, color.value);
+    lines.emplace_back(lx2, ly2, -1.0f, 1.0f, color.value);
 }
 
-void UIBatch::rect(int x, int y, int w, int h, fcolor_t color)
+void UIBatch::rect(int x, int y, int w, int h, color_t color)
 {
     const float lx1 = (x * 2.0f) / Window::getWidth() - 1.0f;
     const float ly1 = 1.0f - (y * 2.0f) / Window::getHeight();
     const float lx2 = ((x + w) * 2.0f) / Window::getWidth() - 1.0f;
     const float ly2 = 1.0f - ((y + h) * 2.0f) / Window::getHeight();
     
-    lines.emplace_back(lx1, ly1, -1.0, -1.0, color);
-    lines.emplace_back(lx2, ly1, -1.0f, 1.0f, color);
+    lines.emplace_back(lx1, ly1, -1.0f, -1.0f, color.value);
+    lines.emplace_back(lx2, ly1, -1.0f, 1.0f, color.value);
 
-    lines.emplace_back(lx1, ly1, -1.0, -1.0, color);
-    lines.emplace_back(lx1, ly2, -1.0f, 1.0f, color);
+    lines.emplace_back(lx1, ly1, -1.0f, -1.0f, color.value);
+    lines.emplace_back(lx1, ly2, -1.0f, 1.0f, color.value);
 
-    lines.emplace_back(lx2, ly1, -1.0, -1.0, color);
-    lines.emplace_back(lx2, ly2, -1.0f, 1.0f, color);
+    lines.emplace_back(lx2, ly1, -1.0f, -1.0f, color.value);
+    lines.emplace_back(lx2, ly2, -1.0f, 1.0f, color.value);
 
-    lines.emplace_back(lx1, ly2, -1.0, -1.0, color);
-    lines.emplace_back(lx2, ly2, -1.0f, 1.0f, color);
+    lines.emplace_back(lx1, ly2, -1.0f, -1.0f, color.value);
+    lines.emplace_back(lx2, ly2, -1.0f, 1.0f, color.value);
 }
 
 void UIBatch::render(AssetsLoader& assets)

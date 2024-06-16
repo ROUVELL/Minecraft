@@ -6,7 +6,7 @@
 LineBatch::LineBatch()
 {
     VAO.setAttrData(0, 3, 0);
-    VAO.setAttrData(1, 4, 3 * sizeof(float));
+    VAO.setAttrData(1, 1, 3 * sizeof(float), attr_type::UNSIGNED_INT);
 
     VBO.create(nullptr, LINE_BATCH_CAPACITY * 2 * sizeof(point_t));
 
@@ -19,15 +19,13 @@ LineBatch::~LineBatch()
     VBO.del();
 }
 
-void LineBatch::line(float x1, float y1, float z1,
-            float x2, float y2, float z2,
-            float r, float g, float b, float a)
+void LineBatch::line(glm::vec3 p1, glm::vec3 p2, color_t color)
 {
-    linesData[count++] = point_t{ { x1, y1, z1 }, { r, g, b, a } };
-    linesData[count++] = point_t{ { x2, y2, z2 }, { r, g, b, a } };
+    linesData[count++] = point_t{ p1, color.value };
+    linesData[count++] = point_t{ p2, color.value };
 }
 
-void LineBatch::box(glm::vec3 position, glm::vec3 size, glm::vec4 color)
+void LineBatch::box(glm::vec3 position, glm::vec3 size, color_t color)
 {
     float w = size.x;
     float h = size.y;

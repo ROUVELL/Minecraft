@@ -9,7 +9,7 @@
 #include "../Voxels/Atlas.hpp"
 
 
-inline constexpr const glm::vec4 BLOCK_BOX_COLOR = glm::vec4(1.0f, 1.0f, 1.0f, 0.6f);
+inline constexpr const color_t BLOCK_BOX_COLOR { 250, 160 };
 
 
 ChunksRenderer::ChunksRenderer(Chunks* const chunks, LineBatch* const lineBatch, const Camera* const camera)
@@ -23,9 +23,9 @@ void ChunksRenderer::drawWorldAxis()
 {
     const glm::vec lookAt = camera->getPosition() + camera->getDirection() * 0.2f;
 
-    lineBatch->line(lookAt, lookAt + glm::vec3(0.03, 0.0, 0.0), RED);
-    lineBatch->line(lookAt, lookAt + glm::vec3(0.0, 0.03, 0.0), GREEN);
-    lineBatch->line(lookAt, lookAt + glm::vec3(0.0, 0.0, 0.03), BLUE);
+    lineBatch->line(lookAt, lookAt + glm::vec3(0.03, 0.0, 0.0), colors::RED);
+    lineBatch->line(lookAt, lookAt + glm::vec3(0.0, 0.03, 0.0), colors::GREEN);
+    lineBatch->line(lookAt, lookAt + glm::vec3(0.0, 0.0, 0.03), colors::BLUE);
 }
 
 void ChunksRenderer::drawChunkBox()
@@ -47,7 +47,7 @@ void ChunksRenderer::drawVoxelBox(glm::vec3 position)
 void ChunksRenderer::drawVoxelNormal(glm::vec3 position, glm::vec3 normal)
 {
     position += 0.5f;
-    lineBatch->line(position, position + normal, BLACK);
+    lineBatch->line(position, position + normal, colors::BLACK);
 }
 
 void ChunksRenderer::render(AssetsLoader& assets, const Atlas& atlas) const

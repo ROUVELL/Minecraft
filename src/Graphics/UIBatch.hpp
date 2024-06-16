@@ -17,7 +17,7 @@ class UIBatch final
     {
         float x, y;
         float u, v;
-        fcolor_t color;
+        u32 color;
     };
 
     Vao VAO;
@@ -35,12 +35,12 @@ public:
     UIBatch(UIBatch&&) noexcept = delete;
     ~UIBatch();
 
-    void sprite(int x, int y, int w, int h, uv_region_t uvregion, fcolor_t color = fcolor_t{});
-    void text(const std::string& text, int x, int y, fcolor_t color = fcolor_t{});
-    void frect(int x, int y, int w, int h, fcolor_t color = fcolor_t{});
+    void sprite(int x, int y, int w, int h, uv_region_t uvregion, color_t color = color_t{});
+    void text(const std::string& text, int x, int y, color_t color = color_t{});
+    void frect(int x, int y, int w, int h, color_t color = color_t{});
     
-    void line(int x1, int y1, int x2, int y2, fcolor_t color = fcolor_t{});
-    void rect(int x, int y, int w, int h, fcolor_t color = fcolor_t{});
+    void line(int x1, int y1, int x2, int y2, color_t color = color_t{});
+    void rect(int x, int y, int w, int h, color_t color = color_t{});
 
     void render(AssetsLoader& assets);
 };
