@@ -81,6 +81,9 @@ void Engine::render()
     chunksRenderer.drawWorldAxis();
     chunksRenderer.render(assets, atlas);
 
+    // player hitbox
+    // lineBatch.box(player.getCamera()->getPosition() - glm::vec3{0.2f, 1.6f, 0.2f}, glm::vec3{0.4f, 1.7f, 0.4f}, {0.0f, 1.0f, 0.0f, 1.0f});
+
     lineBatch.render(assets, player.getCamera()->getProjViewMatrix());
     textBatch.render(assets);
 
