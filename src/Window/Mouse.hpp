@@ -11,7 +11,7 @@ class Mouse final
     static unsigned int buttons[8];
 	static unsigned int current;
 
-	static bool locked, started;
+	static bool locked;
 
 	static float dx, dy, x, y;
 

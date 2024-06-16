@@ -1,34 +1,31 @@
 
 #include "Camera.hpp"
 
-#include <glm/ext/quaternion_geometric.hpp>
-#include <glm/trigonometric.hpp>
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/vector_angle.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
 
 
-Camera::Camera(glm::vec3 pos, float fov, float aspect)
+Camera::Camera(glm::vec3 pos, float fov, float aspect) noexcept
 	: position( pos )
 {
 	proj = glm::perspectiveRH_ZO(glm::radians(fov), aspect, 0.1f, 1000.0f);
 }
 
-glm::mat4 Camera::getProjViewMatrix() const
+glm::mat4 Camera::getProjViewMatrix() const noexcept
 {
 	return proj * glm::lookAtRH(position, position + direction, UP_VEC);
 }
 
-void Camera::yaw(float value)
+void Camera::rotate(float yangle, float zangle) noexcept
 {
-	direction = glm::rotate(direction, value, UP_VEC);
+	yawAngle += yangle;
+	pitchAngle += zangle;
+	pitchAngle = glm::clamp(pitchAngle, -MAX_PITCH, MAX_PITCH);
+
+	direction.x = glm::cos(pitchAngle) * glm::cos(yawAngle);
+	direction.y = glm::sin(pitchAngle);
+	direction.z = glm::cos(pitchAngle) * glm::sin(yawAngle);
+	
 	right = glm::normalize(glm::cross(direction, UP_VEC));
-}
-
-void Camera::pitch(float value)
-{
-	glm::vec3 newDirection = glm::rotate(direction, value, right);
-
-	if (glm::angle(newDirection, UP_VEC) > glm::radians(1.0f) && glm::angle(newDirection, -UP_VEC) > glm::radians(1.0f))
-		direction = newDirection;
+	forward = glm::normalize(glm::cross(-right, UP_VEC));
 }

@@ -3,10 +3,10 @@
 
 using b8 = bool;
 
-using i8 =  signed char;
-using i16 = signed short;
-using i32 = signed int;
-using i64 = signed long int;
+using i8 =  char;
+using i16 = short;
+using i32 = int;
+using i64 = long int;
 
 using u8 =  unsigned char;
 using u16 = unsigned short;
@@ -15,7 +15,6 @@ using u64 = unsigned long int;
 
 using f32 =  float;
 using f64 =  double;
-using f128 = long double;
 
 
 using voxel_id = u8;

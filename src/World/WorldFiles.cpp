@@ -35,7 +35,7 @@ bool WorldFiles::save(const Chunk& chunk) const
     const voxel_id* const voxels = chunk.getConstData();
 
     voxel_id currentId = voxels[0];
-    u32 count = 1;
+    u16 count = 1;
 
     for (int i = 1; i < CHUNK_VOLUME; ++i)
     {
@@ -46,7 +46,7 @@ bool WorldFiles::save(const Chunk& chunk) const
         }
 
         file.write(reinterpret_cast<char*>(&currentId), sizeof(voxel_id));
-        file.write(reinterpret_cast<char*>(&count), sizeof(u32));
+        file.write(reinterpret_cast<char*>(&count), sizeof(u16));
 
         currentId = voxels[i];
         count = 1;
@@ -54,7 +54,7 @@ bool WorldFiles::save(const Chunk& chunk) const
 
     // we must write the last set of blocks (usually air)
     file.write(reinterpret_cast<char*>(&currentId), sizeof(voxel_id));
-    file.write(reinterpret_cast<char*>(&count), sizeof(u32));
+    file.write(reinterpret_cast<char*>(&count), sizeof(u16));
 
     file.close();
 
@@ -71,11 +71,11 @@ bool WorldFiles::load(Chunk& chunk) const
     voxel_id* const voxels = chunk.getData();
 
     voxel_id currentId = 0;
-    u32 count = 1;
-    u32 offset = 0;
+    u16 count = 1;
+    u16 offset = 0;
 
     while (file.read(reinterpret_cast<char*>(&currentId), sizeof(voxel_id)) &&
-           file.read(reinterpret_cast<char*>(&count), sizeof(u32)))
+           file.read(reinterpret_cast<char*>(&count), sizeof(u16)))
     {
         memset(voxels + offset, currentId, count * sizeof(voxel_id));
         offset += count;

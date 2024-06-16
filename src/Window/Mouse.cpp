@@ -10,7 +10,6 @@ void cursorPositionCallback(GLFWwindow*, double xpos, double ypos);
 unsigned int Mouse::buttons[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 unsigned int Mouse::current = 0;
 bool Mouse::locked = false;
-bool Mouse::started = false;
 float Mouse::dx = 0.0;
 float Mouse::dy = 0.0;
 float Mouse::x = 0.0;
@@ -39,13 +38,15 @@ void mouseButtonCallback(GLFWwindow*, int button, int action, int)
 
 void cursorPositionCallback(GLFWwindow*, double xpos, double ypos)
 {
-	if (Mouse::started)
+	static bool started = false;
+
+	if (started)
 	{
 		Mouse::dx += xpos - Mouse::x;
 		Mouse::dy += ypos - Mouse::y;
 	}
 	else
-		Mouse::started = true;
+		started = true;
 
 	Mouse::x = xpos;
 	Mouse::y = ypos;

@@ -6,6 +6,8 @@
 #include "../../Window/Mouse.hpp"
 
 #include "../Raycasting.hpp"
+#include "../../Physics/Hitbox.hpp"
+#include "../../Physics/Physics.hpp"
 
 
 Player::Player(Chunks* const chunks, glm::vec3 pos, float speed)
@@ -25,8 +27,7 @@ void Player::update(double dt)
 
     if (Mouse::isCursorLocked())
     {
-        camera.yaw(-Mouse::getDx() * 0.2f * dt);
-        camera.pitch(-Mouse::getDy() * 0.1f * dt);
+        camera.rotate(Mouse::getDx() * H_MOUSE_SENSETIVITY, -Mouse::getDy() * V_MOUSE_SENSETIVITY);
 
         if (Raycasting::id)
         {
@@ -43,8 +44,10 @@ void Player::update(double dt)
         }
     }
 
+    glm::vec3 oldPosition = camera.getPosition();
+
     float distance = speed * dt;
-    if (Keyboard::isPressed(KEY_LEFT_SHIFT)) distance *= 3.0;
+    if (Keyboard::isPressed(KEY_LEFT_SHIFT)) distance *= 3.0f;
 
     if (Keyboard::isPressed(KEY_W))         camera.moveForward(distance);
     if (Keyboard::isPressed(KEY_S))         camera.moveBackward(distance);
@@ -52,4 +55,14 @@ void Player::update(double dt)
     if (Keyboard::isPressed(KEY_A))         camera.moveLeft(distance);
     if (Keyboard::isPressed(KEY_SPACE))     camera.moveUp(distance);
     if (Keyboard::isPressed(KEY_LEFT_CTRL)) camera.moveDown(distance);
+
+
+    glm::vec3 velocity = camera.getPosition() - oldPosition;
+
+    static hitbox_t hitbox;
+    hitbox.min = oldPosition - glm::vec3{0.2f, 1.6f, 0.2f};
+    hitbox.max = oldPosition + glm::vec3{0.2f, 0.1f, 0.2f};
+
+    if (collide_with_chunk(*chunks, &hitbox, velocity))
+        camera.setPosition(hitbox.min + glm::vec3{0.2f, 1.6f, 0.2f});
 }

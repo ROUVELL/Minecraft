@@ -6,32 +6,42 @@
 class Camera
 {
 	inline constexpr static const glm::vec3 UP_VEC = glm::vec3(0.0f, 1.0f, 0.0f);
+	inline constexpr static const float MAX_PITCH = 1.56905f;  // 89.9 deg
 
 	glm::vec3 position;
-	glm::vec3 direction = glm::vec3{0.0f, 0.0f, -1.0f};
-	glm::vec3 right = glm::vec3{1.0f, 0.0f, 0.0f};
+	glm::vec3 direction = glm::vec3{1.0f, 0.0f, 0.0f};
+
+	glm::vec3 forward = glm::vec3{1.0f, 0.0f, 0.0f};
+	glm::vec3 right = glm::vec3{0.0f, 0.0f, 1.0f};
+
+	float yawAngle = 0.0f;
+	float pitchAngle = 0.0f;
 
 	glm::mat4 proj = glm::mat4{1.0f};
 
 public:
-	Camera(glm::vec3 pos, float fov, float aspect);
+	Camera(glm::vec3 pos, float fovDeg, float aspect) noexcept;
 
-	void yaw(float angle);
-	void pitch(float angle);
+	glm::vec3 getPosition() const noexcept { return position; }
+	glm::vec3 getDirection() const noexcept { return direction; }
 
-	void moveForward(float distance)  { position += direction * distance; }
-	void moveBackward(float distance) { position -= direction * distance; }
-	void moveRight(float distance)    { position += right * distance; }
-	void moveLeft(float distance)     { position -= right * distance; }
-	void moveUp(float distance)       { position += UP_VEC * distance; }
-	void moveDown(float distance)     { position -= UP_VEC * distance; }
+	float getYawAngle() const noexcept { return yawAngle; }
+	float getPitchAgnle() const noexcept { return pitchAngle; }
 
-	glm::vec3 getPosition()  const { return position; }
-	glm::vec3 getDirection() const { return direction; }
+	glm::mat4 getProjViewMatrix() const noexcept;
 
-	void setPosition(const glm::vec3 newPosition)   { position = newPosition; }
-	void setPosition(float x, float y, float z)     { position = {x, y, z}; }
+	void setPosition(const glm::vec3 newPosition) noexcept { position = newPosition; }
+	void setPosition(float x, float y, float z) noexcept   { position = {x, y, z}; }
+	void setYawAngle(float yangle) noexcept                { yawAngle = yangle; }
+	void setPitchAngle(float zangle) noexcept              { pitchAngle = zangle; }
 
-	glm::mat4 getProjViewMatrix() const;
+	void rotate(float yangle, float zangle) noexcept;
+
+	void moveForward(float distance) noexcept  { position += forward * distance; }
+	void moveBackward(float distance) noexcept { position -= forward * distance; }
+	void moveRight(float distance) noexcept    { position += right * distance; }
+	void moveLeft(float distance) noexcept     { position -= right * distance; }
+	void moveUp(float distance) noexcept       { position += UP_VEC * distance; }
+	void moveDown(float distance) noexcept     { position -= UP_VEC * distance; }
 };
 

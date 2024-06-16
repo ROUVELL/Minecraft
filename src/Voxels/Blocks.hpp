@@ -18,7 +18,7 @@ struct Block
     std::string name;  // unigue string name (air, dirt, grass, ...)
     UVRegions uv_regions;
 
-    Block() : name("empty") { }
+    Block() : name("unknown") { }
 };
 
 
