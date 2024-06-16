@@ -19,3 +19,19 @@ using f64 =  double;
 
 using voxel_id = u8;
 using Generator = void (voxel_id*, int, int);
+
+struct uv_region_t
+{
+    float u1 = 0.0f;
+    float v1 = 0.0f;
+    float u2 = 1.0f;
+    float v2 = 1.0f;
+};
+
+struct fcolor_t
+{
+    float r = 1.0f;
+    float g = 1.0f;
+    float b = 1.0f;
+    float a = 1.0f;
+};

@@ -21,3 +21,5 @@ inline constexpr const int MESH_BUILDING_PER_FRAME =     8;
 
 inline constexpr const float V_MOUSE_SENSETIVITY =       0.002f;
 inline constexpr const float H_MOUSE_SENSETIVITY =       0.003f;
+
+inline constexpr const bool PLAYER_COLLISION =           false;

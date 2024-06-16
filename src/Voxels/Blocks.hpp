@@ -10,7 +10,7 @@
 
 struct UVRegions
 {
-    UVRegion front, back, right, left, top, bottom;
+    uv_region_t front, back, right, left, top, bottom;
 };
 
 struct Block

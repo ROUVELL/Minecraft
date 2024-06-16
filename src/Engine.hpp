@@ -5,7 +5,7 @@
 #include "World/Entity/Player.hpp"
 #include "Loaders/AssetsLoader.hpp"
 #include "Graphics/LineBatch.hpp"
-#include "Graphics/TextBatch.hpp"
+#include "Graphics/UIBatch.hpp"
 
 #include "Voxels/Atlas.hpp"
 
@@ -17,7 +17,7 @@ class Engine final
     ChunksRenderer chunksRenderer;
 
     LineBatch lineBatch;
-    TextBatch textBatch;
+    UIBatch uiBatch;
     
     AssetsLoader assets;
     Atlas        atlas;

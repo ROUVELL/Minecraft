@@ -4,18 +4,12 @@
 #include <string>
 
 #include "../GL/Texture.hpp"
+#include "../typedefs.hpp"
 
-struct UVRegion
-{
-    float u1 = 0.0;
-    float v1 = 0.0;
-    float u2 = 1.0;
-    float v2 = 1.0;
-};
 
 class Atlas final
 {
-    std::unordered_map<std::string, UVRegion> regions;
+    std::unordered_map<std::string, uv_region_t> regions;
     Texture textureArray;
 
 public:
@@ -24,7 +18,7 @@ public:
     Atlas(Atlas&&) noexcept = delete;
     ~Atlas();
 
-    UVRegion getRegion(const std::string& name) const { return regions.at(name); }
+    uv_region_t getRegion(const std::string& name) const { return regions.at(name); }
     const Texture& getTexture() const { return textureArray; }
 };
 

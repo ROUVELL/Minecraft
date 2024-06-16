@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 
 Atlas::Atlas()
 {
-    regions["all"] = UVRegion{ };
+    regions["all"] = uv_region_t{ };
 
     Image arrayImg{ TEXTURE_SIZE, TEXTURE_SIZE };
 
@@ -30,7 +30,7 @@ Atlas::Atlas()
 
             float u = x / (float)TEXTURE_SIZE;
             float v = y / (float)TEXTURE_SIZE;
-            regions[entry.path().filename().stem()] = UVRegion{ u, v, u + UV_SIZE, v + UV_SIZE };
+            regions[entry.path().filename().stem()] = uv_region_t{ u, v, u + UV_SIZE, v + UV_SIZE };
 
             x += FRAME_SIZE;
             if (x >= TEXTURE_SIZE)

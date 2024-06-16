@@ -44,7 +44,7 @@ void Player::update(double dt)
         }
     }
 
-    glm::vec3 oldPosition = camera.getPosition();
+    [[maybe_unused]] glm::vec3 oldPosition = camera.getPosition();
 
     float distance = speed * dt;
     if (Keyboard::isPressed(KEY_LEFT_SHIFT)) distance *= 3.0f;
@@ -56,13 +56,15 @@ void Player::update(double dt)
     if (Keyboard::isPressed(KEY_SPACE))     camera.moveUp(distance);
     if (Keyboard::isPressed(KEY_LEFT_CTRL)) camera.moveDown(distance);
 
+    if constexpr (PLAYER_COLLISION)
+    {
+        glm::vec3 velocity = camera.getPosition() - oldPosition;
 
-    glm::vec3 velocity = camera.getPosition() - oldPosition;
+        static hitbox_t hitbox;
+        hitbox.min = oldPosition - glm::vec3{0.2f, 1.6f, 0.2f};
+        hitbox.max = oldPosition + glm::vec3{0.2f, 0.1f, 0.2f};
 
-    static hitbox_t hitbox;
-    hitbox.min = oldPosition - glm::vec3{0.2f, 1.6f, 0.2f};
-    hitbox.max = oldPosition + glm::vec3{0.2f, 0.1f, 0.2f};
-
-    if (collide_with_chunk(*chunks, &hitbox, velocity))
-        camera.setPosition(hitbox.min + glm::vec3{0.2f, 1.6f, 0.2f});
+        if (collide_with_chunk(*chunks, &hitbox, velocity))
+            camera.setPosition(hitbox.min + glm::vec3{0.2f, 1.6f, 0.2f});
+    }
 }

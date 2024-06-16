@@ -7,7 +7,6 @@
 #include "../vendors/stb/stb_image.hpp"
 #include "../Graphics/Image.hpp"
 
-
 inline constexpr GLenum externalFormat(uint32_t channels) noexcept
 {
 	return (channels == 4) ? GL_RGBA : GL_RGB;
@@ -55,6 +54,12 @@ void Texture::fromBytes(int width, int height, int channels, const unsigned char
 {
 	glTextureStorage2D(ID, 1 + std::floor(std::log2(std::max(width, height))), internalFormat(channels), width, height);
 	glTextureSubImage2D(ID, 0, 0, 0, width, height, externalFormat(channels), GL_UNSIGNED_BYTE, bytes);
+
+	glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+	f32 borderColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTextureParameterfv(ID, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 	glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 	glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

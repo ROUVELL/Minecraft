@@ -7,7 +7,8 @@
 #include "Window/Window.hpp"
 #include "Window/Keyboard.hpp"
 #include "Window/Mouse.hpp"
-#include "Gui/Label.hpp"
+
+#include "Gui/Elements/Label.hpp"
 
 
 Engine::Engine()
@@ -61,31 +62,34 @@ void Engine::render()
     glm::vec3 camPos = player.getCamera()->getPosition();
 
     std::ostringstream title;
-    title << "FPS: " << fps << '\n';
+    title << "FPS: " << fps << "\n\n";
     title << "Position: [" << camPos.x << ", " << camPos.y << ", " << camPos.z << "]\n";
-    title << "Angle: [yaw: " << player.getCamera()->getYawAngle() << ", pitch: " << player.getCamera()->getPitchAgnle() << "]\n";
+    title << "Angle: [yaw: " << player.getCamera()->getYawAngle() << ", pitch: " << player.getCamera()->getPitchAgnle() << "]\n\n";
     title << "Look at: " << Blocks::getBlock(Raycasting::id).name;
     title << "\nSelected: " << Blocks::getBlock(player.getSelected()).name;
     
-    static Label lbl(&textBatch, title.str(), 3, 0);
+    static Label lbl(title.str(), 3, 0);
     lbl.setText(title.str());
-    lbl.render();
+    lbl.render(uiBatch);
 
     if (Raycasting::id)
     {
-        chunksRenderer.drawVoxelNormal(Raycasting::iend, Raycasting::norm);
+        // chunksRenderer.drawVoxelNormal(Raycasting::iend, Raycasting::norm);
         chunksRenderer.drawVoxelBox(Raycasting::iend);
     }
 
     // chunksRenderer.drawChunkBox();
-    chunksRenderer.drawWorldAxis();
+    // chunksRenderer.drawWorldAxis();
     chunksRenderer.render(assets, atlas);
+
+    uiBatch.line(960, 530, 960, 550, { .a = 0.6f });
+    uiBatch.line(950, 540, 970, 540, { .a = 0.6f });
 
     // player hitbox
     // lineBatch.box(player.getCamera()->getPosition() - glm::vec3{0.2f, 1.6f, 0.2f}, glm::vec3{0.4f, 1.7f, 0.4f}, {0.0f, 1.0f, 0.0f, 1.0f});
 
     lineBatch.render(assets, player.getCamera()->getProjViewMatrix());
-    textBatch.render(assets);
+    uiBatch.render(assets);
 
     Window::swapBuffers();
 }
