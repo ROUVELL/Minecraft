@@ -46,6 +46,8 @@ void Engine::processEvents() noexcept
         Window::close();
     if (Events::justPressed(KEY_TAB))
         Events::setCursorLock(!Events::cursorLocked());
+    if (Events::justPressed(KEY_F5))
+        chunks.clear();
 
     uiManager.process_input();
 }

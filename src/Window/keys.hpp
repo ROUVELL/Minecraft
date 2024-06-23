@@ -2,6 +2,8 @@
 
 #include "../typedefs.hpp"
 
+#include <GLFW/glfw3.h>
+
 
 inline constexpr u32 MOUSE_BUTTON_LEFT =   0;
 inline constexpr u32 MOUSE_BUTTON_RIGHT =  1;
@@ -42,3 +44,16 @@ inline constexpr u32 KEY_UP =    265;
 inline constexpr u32 KEY_DOWN =  264;
 inline constexpr u32 KEY_LEFT =  263;
 inline constexpr u32 KEY_RIGHT = 262;
+
+inline constexpr u32 KEY_F1 =  290;
+inline constexpr u32 KEY_F2 =  291;
+inline constexpr u32 KEY_F3 =  292;
+inline constexpr u32 KEY_F4 =  293;
+inline constexpr u32 KEY_F5 =  294;
+inline constexpr u32 KEY_F6 =  295;
+inline constexpr u32 KEY_F7 =  296;
+inline constexpr u32 KEY_F8 =  297;
+inline constexpr u32 KEY_F9 =  298;
+inline constexpr u32 KEY_F10 = 299;
+inline constexpr u32 KEY_F11 = 300;
+inline constexpr u32 KEY_F12 = 301;

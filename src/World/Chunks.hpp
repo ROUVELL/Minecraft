@@ -50,6 +50,7 @@ public:
 
 	void shift(int dx, int dz);
 	void centeredAt(int wx, int wz);
+	void clear();
 
 	void update();
 	void render(Shader& shader) const;

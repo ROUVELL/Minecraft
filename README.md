@@ -12,6 +12,8 @@
 - <kbd>**Space**</kbd> - move up
 - <kbd>**CTRL**</kbd> - move down
 - <kbd>**Shift**</kbd> - speed boost
+- <kbd>**F5**</kbd> - clear the world
+
 
 #### Arch-based distro:
 If you use X11

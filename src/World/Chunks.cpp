@@ -5,6 +5,7 @@
 #include "../GL/Shader.hpp"
 #include "../math.hpp"
 
+
 Chunks::Chunks()
 	: chunks(WORLD_AREA, nullptr),
 	chunksTemp(WORLD_AREA, nullptr)
@@ -35,7 +36,7 @@ Chunk* Chunks::getNearestModified() const
 		{
 			int index = cx + cz * WORLD_SIZE;
 
-			if (chunks[index]->isModified())
+			if (chunks[index] && chunks[index]->isModified())
 			{
 				int dist = abs(cx - HALF_WORLD_SIZE) + abs(cz - HALF_WORLD_SIZE);
 				if (dist < minDist)
@@ -89,9 +90,6 @@ void Chunks::setVoxel(int wx, int wy, int wz, voxel_id id)
 
 void Chunks::shift(int dx, int dz)
 {
-	if (dx == 0 && dz == 0)
-		return;
-
 	for (int index = 0; index < WORLD_AREA; ++index)
 	{
 		Chunk* chunk = chunks[index];
@@ -143,10 +141,28 @@ void Chunks::centeredAt(int wx, int wz)
 	int cx = modfloordiv(wx, CHUNK_SIDE);
 	int cz = modfloordiv(wz, CHUNK_SIDE);
 
-	int offsetX = cx - (WORLD_SIZE / 2);
-	int offsetZ = cz - (WORLD_SIZE / 2);
+	int offsetX = cx - (WORLD_SIZE / 2) - ox;
+	int offsetZ = cz - (WORLD_SIZE / 2) - oz;
 
-	shift(offsetX - ox, offsetZ - oz);
+	if (offsetX || offsetZ)
+		shift(offsetX, offsetZ);
+}
+
+void Chunks::clear()
+{
+	for (int i = 0; i < WORLD_AREA; ++i)
+	{
+		Chunk* chunk = chunks[i];
+
+		if (chunk)
+		{
+			chunk->onDelete();
+			delete chunk;
+			chunks[i] = nullptr;
+		}
+	}
+
+	shift(0, 0);
 }
 
 void Chunks::update()
@@ -185,8 +201,12 @@ void Chunks::render(Shader& shader) const
 		for (int cz = 1; cz < WORLD_SIZE - 1; ++cz)
 		{
 			const Chunk* const chunk = chunks[cx + cz * WORLD_SIZE];
-			shader.uniformMat4("model", chunk->getModelMatrix());
-			chunk->render();
+
+			if (chunk)
+			{
+				shader.uniformMat4("model", chunk->getModelMatrix());
+				chunk->render();
+			}
 		}
 }
 
