@@ -2,8 +2,8 @@
 
 #include "../Chunks.hpp"
 #include "../../Window/Window.hpp"
-#include "../../Window/Keyboard.hpp"
-#include "../../Window/Mouse.hpp"
+#include "../../Window/Events.hpp"
+#include "../../Window/keys.hpp"
 
 #include "../Raycasting.hpp"
 #include "../../Physics/Hitbox.hpp"
@@ -19,42 +19,40 @@ Player::Player(Chunks* const chunks, glm::vec3 pos, float speed)
 
 void Player::update(double dt)
 {
+    if (!Events::cursorLocked())
+        return;
+
     for (uint key = KEY_1; key < KEY_9; ++key)
-    {
-        if (Keyboard::isJustPressed(key))
+        if (Events::justPressed(key))
             selected = key - KEY_0;
-    }
 
-    if (Mouse::isCursorLocked())
+    camera.rotate(Events::getDx() * H_MOUSE_SENSETIVITY, -Events::getDy() * V_MOUSE_SENSETIVITY);
+
+    if (Raycasting::id)
     {
-        camera.rotate(Mouse::getDx() * H_MOUSE_SENSETIVITY, -Mouse::getDy() * V_MOUSE_SENSETIVITY);
+        const glm::ivec3 ipos = Raycasting::iend;
+        const glm::ivec3 inorm = Raycasting::norm;
 
-        if (Raycasting::id)
+        if (Events::justClicked(MOUSE_BUTTON_LEFT))
         {
-            const glm::ivec3 ipos = Raycasting::iend;
-            const glm::ivec3 inorm = Raycasting::norm;
-
-            if (Mouse::isJustClicked(MOUSE_BUTTON_LEFT))
-            {
-                glm::ivec3 voxelPos = ipos + inorm;
-                chunks->setVoxel(voxelPos.x, voxelPos.y, voxelPos.z, selected);
-            }
-            if (Mouse::isJustClicked(MOUSE_BUTTON_RIGHT))
-                chunks->setVoxel(ipos.x, ipos.y, ipos.z, 0);
+            glm::ivec3 voxelPos = ipos + inorm;
+            chunks->setVoxel(voxelPos.x, voxelPos.y, voxelPos.z, selected);
         }
+        if (Events::justClicked(MOUSE_BUTTON_RIGHT))
+            chunks->setVoxel(ipos.x, ipos.y, ipos.z, 0);
     }
 
     [[maybe_unused]] glm::vec3 oldPosition = camera.getPosition();
 
     float distance = speed * dt;
-    if (Keyboard::isPressed(KEY_LEFT_SHIFT)) distance *= 3.0f;
+    if (Events::pressed(KEY_LEFT_SHIFT)) distance *= 3.0f;
 
-    if (Keyboard::isPressed(KEY_W))         camera.moveForward(distance);
-    if (Keyboard::isPressed(KEY_S))         camera.moveBackward(distance);
-    if (Keyboard::isPressed(KEY_D))         camera.moveRight(distance);
-    if (Keyboard::isPressed(KEY_A))         camera.moveLeft(distance);
-    if (Keyboard::isPressed(KEY_SPACE))     camera.moveUp(distance);
-    if (Keyboard::isPressed(KEY_LEFT_CTRL)) camera.moveDown(distance);
+    if (Events::pressed(KEY_W))         camera.moveForward(distance);
+    if (Events::pressed(KEY_S))         camera.moveBackward(distance);
+    if (Events::pressed(KEY_D))         camera.moveRight(distance);
+    if (Events::pressed(KEY_A))         camera.moveLeft(distance);
+    if (Events::pressed(KEY_SPACE))     camera.moveUp(distance);
+    if (Events::pressed(KEY_LEFT_CTRL)) camera.moveDown(distance);
 
     if constexpr (PLAYER_COLLISION)
     {

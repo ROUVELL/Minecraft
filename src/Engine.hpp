@@ -9,6 +9,8 @@
 
 #include "Voxels/Atlas.hpp"
 
+#include "Gui/UIManager.hpp"
+
 
 class Engine final
 {
@@ -18,6 +20,7 @@ class Engine final
 
     LineBatch lineBatch;
     UIBatch uiBatch;
+    UIManager uiManager;
     
     AssetsLoader assets;
     Atlas        atlas;
@@ -25,20 +28,20 @@ class Engine final
     f64 dt = 0.16;
     u32 fps = 60;
 
-    void updateDt();
-    void processEvents();
-    void update();
-    void render();
+    void updateDt() noexcept;
+    void processEvents() noexcept;
+    void update() noexcept;
+    void render() noexcept;
 
 public:
-    Engine();
+    Engine() noexcept;
     Engine(const Engine&) = delete;
     Engine(Engine&&) noexcept = delete;
     ~Engine() = default;
 
-    f64 getDt() const    { return dt; }
-    u32 getFps() const   { return fps; }
+    f64 getDt() const noexcept { return dt; }
+    u32 getFps() const noexcept { return fps; }
 
-    void run();
-    void stop();
+    void run() noexcept;
+    void stop() noexcept;
 };

@@ -15,7 +15,7 @@ inline constexpr float SYMBOL_UV_WIDTH = (float)SYMBOL_WIDTH / (float)FONT_IMG_W
 inline constexpr float SYMBOL_UV_HEIGHT = (float)SYMBOL_HEIGHT / (float)FONT_IMG_HEIGHT;
 
 
-UIBatch::UIBatch()
+UIBatch::UIBatch() noexcept
     : lines(UI_BATCH_LINES_CAPICITY * 2),
     sprites(UI_BATCH_SPRITES_CAPICITY * 4),
     spriteIndices(UI_BATCH_SPRITES_CAPICITY * 6)
@@ -24,7 +24,7 @@ UIBatch::UIBatch()
     VAO.setAttrData(1, 2, 2 * sizeof(float));
     VAO.setAttrData(2, 1, 4 * sizeof(float), attr_type::UNSIGNED_INT);
 
-    VBO.create(nullptr, (UI_BATCH_LINES_CAPICITY + UI_BATCH_SPRITES_CAPICITY * 4)* sizeof(ui_vertex_t), buffer_usage::STREAM_DRAW);
+    VBO.create(nullptr, (UI_BATCH_LINES_CAPICITY + UI_BATCH_SPRITES_CAPICITY * 4) * sizeof(ui_vertex_t), buffer_usage::STREAM_DRAW);
 
     VAO.bindVBO(VBO.getID(), sizeof(ui_vertex_t));
 
@@ -36,7 +36,7 @@ UIBatch::~UIBatch()
     VBO.del();
 }
 
-void UIBatch::sprite(int x, int y, int w, int h, uv_region_t uvregion, color_t color)
+void UIBatch::sprite(int x, int y, int w, int h, uv_region_t uvregion, color_t color) const noexcept
 {
     const float sx = (x * 2.0f) / Window::getWidth() - 1.0f;
     const float sy = 1.0f - (y * 2.0f) / Window::getHeight();
@@ -59,20 +59,18 @@ void UIBatch::sprite(int x, int y, int w, int h, uv_region_t uvregion, color_t c
     sprites.emplace_back( sx, sy - sh, uvregion.u1, uvregion.v2, color.value );
 }
 
-
-void UIBatch::text(const std::string& text, int x, int y, color_t color)
+void UIBatch::text(const std::string& text, int x, int y, color_t color) const noexcept
 {
     const int sx = x;
 
-    for (unsigned i = 0; i < text.length(); ++i)
+    for (unsigned char c : text)
     {
-        unsigned char c = text[i];
-
         if (c == '\t' || c == '\f' || c == '\r' || c == ' ')
         {
             x += SYMBOL_WIDTH / 2;
             continue;
         }
+
         if (c == '\n')
         {
             x = sx;
@@ -89,12 +87,12 @@ void UIBatch::text(const std::string& text, int x, int y, color_t color)
     }
 }
 
-void UIBatch::frect(int x, int y, int w, int h, color_t color)
+void UIBatch::frect(int x, int y, int w, int h, color_t color) const noexcept
 {
     sprite(x, y, w, h, {-1.0f, -1.0f, -1.0f, -1.0f}, color);
 }
 
-void UIBatch::line(int x1, int y1, int x2, int y2, color_t color)
+void UIBatch::line(int x1, int y1, int x2, int y2, color_t color) const noexcept
 {
     const float lx1 = (x1 * 2.0f) / Window::getWidth() - 1.0f;
     const float ly1 = 1.0f - (y1 * 2.0f) / Window::getHeight();
@@ -105,7 +103,7 @@ void UIBatch::line(int x1, int y1, int x2, int y2, color_t color)
     lines.emplace_back(lx2, ly2, -1.0f, 1.0f, color.value);
 }
 
-void UIBatch::rect(int x, int y, int w, int h, color_t color)
+void UIBatch::rect(int x, int y, int w, int h, color_t color) const noexcept
 {
     const float lx1 = (x * 2.0f) / Window::getWidth() - 1.0f;
     const float ly1 = 1.0f - (y * 2.0f) / Window::getHeight();
@@ -125,7 +123,7 @@ void UIBatch::rect(int x, int y, int w, int h, color_t color)
     lines.emplace_back(lx2, ly2, -1.0f, 1.0f, color.value);
 }
 
-void UIBatch::render(AssetsLoader& assets)
+void UIBatch::render(AssetsLoader& assets) noexcept
 {
     assets.getShader("ui")->use();
     assets.getTexture("fonts/font")->bindUnit();

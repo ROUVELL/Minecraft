@@ -6,8 +6,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "Keyboard.hpp"
-#include "Mouse.hpp"
+#include "Events.hpp"
 
 
 void windowSizeCallback(GLFWwindow*, int width, int height);
@@ -75,8 +74,9 @@ void Window::initialize(bool fullscreen, bool vsinc)
         return;
     }
 
-	Keyboard::initialize();
-	Mouse::initialize();
+	glfwSetInputMode(window, GLFW_LOCK_KEY_MODS, GLFW_TRUE);
+
+	Events::initialize();
 
 	glfwSetWindowSizeCallback(Window::getInstance(), windowSizeCallback);
 
@@ -115,8 +115,7 @@ void Window::clear()
 
 void Window::pollEvents()
 {
-	Keyboard::_update();
-	Mouse::_update();
+	Events::_update();
 	glfwPollEvents();
 }
 
