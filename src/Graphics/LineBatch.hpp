@@ -7,7 +7,7 @@
 #include "../GL/Buffers/Vao.hpp"
 
 
-inline constexpr const u32 LINE_BATCH_CAPACITY = 32U;
+inline constexpr const u32 LINE_BATCH_CAPACITY = 64U;
 
 
 class AssetsLoader;

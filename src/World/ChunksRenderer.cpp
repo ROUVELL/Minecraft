@@ -36,7 +36,7 @@ void ChunksRenderer::drawChunkBox()
     const float x = cx * CHUNK_SIDE;
     const float z = cz * CHUNK_SIDE;
 
-    lineBatch->box(glm::vec3(x, 0.0f, z) - 0.09f, glm::vec3(CHUNK_SIDE, CHUNK_HEIGHT, CHUNK_SIDE) + 0.01f);
+    lineBatch->box(glm::vec3(x, 0.0f, z) - 0.01f, glm::vec3(CHUNK_SIDE, CHUNK_HEIGHT, CHUNK_SIDE) + 0.02f);
 }
 
 void ChunksRenderer::drawVoxelBox(glm::vec3 position)
